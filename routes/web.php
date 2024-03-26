@@ -14,7 +14,9 @@
 Route::get('/home', 'Auth\LoginController@logout');
 
 Route::get('/add_rapport', 'RapportController@add_rapport');
+Route::get('/add_rapport_2/{id}', 'RapportController@add_rapport_2');
 
+Route::post('/insert_rapport', 'RapportController@insert_rapport');
 
 /** USER ROUTES **/
 Route::get('/users', 'UsersController@users');

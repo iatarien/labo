@@ -29,7 +29,7 @@
                                 <div class="form-group row">
                                     <label class="control-label col-lg-2 text-right" for="title">الوقت</label>
                                     <div class="col-lg-8">
-                                    <select class="form-control">
+                                    <select name="time" class="form-control">
                                         <?php for($i = 8; $i<= 20; $i++){ ?>
                                             <option>{{$i}}:00</option>
                                         <?php } ?>
@@ -39,9 +39,9 @@
                                 <div class="form-group row">
                                     <label class="control-label col-lg-2 text-right" for="title">المخبر</label>
                                     <div class="col-lg-8">
-                                    <select class="form-control">
+                                    <select name="labo" class="form-control">
                                         <?php for($i = 1; $i<= 3; $i++){ ?>
-                                            <option> المخبر {{$i}}</option>
+                                            <option value=" المخبر {{$i}}"> المخبر {{$i}}</option>
                                         <?php } ?>
                                     </select>
                                     </div>
@@ -49,21 +49,30 @@
                                 <div class="form-group row">
                                     <label class="control-label col-lg-2 text-right" for="title">المهندس المتابع</label>
                                     <div class="col-lg-8">
-                                    <select class="form-control">
-                                        <option>جميع المهندسين</option>
-                                        <option>بعض المهندسين</option>
+                                    <select name="engineer" class="form-control" onchange="changed_eng(this.value)">
+                                        <option value="all">جميع المهندسين</option>
+                                        <option value="{{$user->id}}">بعض المهندسين</option>
                                     </select>
+                                    </div>
+                                </div>
+                                <div id="some" style="display : none"  class="form-group row">
+                                    <label  class="control-label col-lg-2 text-right" for="title">المهندسين المتابعين</label>
+                                    <div class="col-lg-8">
+                                    <input type="text" class="form-control" readonly value ="{{$user->full_name}}">
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <label class="control-label col-lg-2 text-right" for="title">النشاط</label>
                                     <div class="col-lg-8">
-                                    <select class="form-control">
-                                        <option> نشاط بيداغوجي</option>
-                                        <option> أخرى</option>
-                                        <option>لا شيئ </option>
+                                    <select name="activite" class="form-control">
+                                        <option value="نشاط بيداغوجي"> نشاط بيداغوجي</option>
+                                        <option value="أخرى"> أخرى</option>
+                                        <option value="لا شيئ ">لا شيئ </option>
                                     </select>
                                     </div>
+                                </div>
+                                <div class="form-group" align="center">
+                                <button class="btn btn-primary" type="submit">التالي</button>
                                 </div>
                             </from>
                         </div>
@@ -77,6 +86,13 @@
 
             @include('components.footer')
 <script type="text/javascript">
+function changed_eng(val){
+    if(val =="all"){
+        document.getElementById('some').style.display ='none';
+    }else{
+        document.getElementById('some').style.display ='flex';
+    } 
+}
 window.onload = function(){
 	document.getElementById('loading').style.display = "none";
 };

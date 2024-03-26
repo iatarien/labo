@@ -42,6 +42,15 @@
         <i class="fas fa-fw fa-table"></i>
         <span>حصيلة شهرية/سنوية</span></a>
 </li>
+
+<hr class="sidebar-divider">
+
+<!-- Nav Item - Tables -->
+<li class="nav-item active">
+    <a class="nav-link" href="/users">
+        <i class="fas fa-fw fa-users"></i>
+        <span>الحسابات</span></a>
+</li>
 <!-- Divider -->
 <hr class="sidebar-divider d-none d-md-block">
 

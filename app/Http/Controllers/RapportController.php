@@ -31,13 +31,31 @@ class RapportController extends Controller
 
     public function add_rapport()
     {   
-
         $user = Auth::user();
-        return view('rapport.ajouter',['user' => $user]);
+        $engineers = DB::table('users')->where('service',"Ingenieur")->get();
+        return view('rapport.ajouter1',['user' => $user,"engineers"=>$engineers]);
         
     }
-   
+    public function add_rapport_2($id)
+    {   
+        $user = Auth::user();
+        $rapport = DB::table('rapport')->where('id_rapport',$id)->first();
+        return view('rapport.ajouter2',['user' => $user,"rapport"=>$rapport]);
+        
+    }
+    public function insert_rapport(Request $request){
+        $user = Auth::user()->id;
+        $date = $request['date'];
+        $time = $request['time'];
+        $labo = $request['labo'];
+        $activite = $request['activite'];
+        $engineer = $request['engineer'];
 
+        $id = DB::table('rapport')->
+        insertGetId(["date"=>$date,"time"=>$time,"labo"=>$labo,"activite"=>$activite,
+        "engineer"=>$engineer,"user_id"=>$user]);
+        return Redirect::to('/add_rapport_2/'.$id);
+    }
 
     public function insert_op(Request $request){
         $user = Auth::user()->id;
