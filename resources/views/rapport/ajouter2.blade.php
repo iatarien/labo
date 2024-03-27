@@ -18,8 +18,9 @@
                             <h6 class="m-0 font-weight-bold text-primary">إضافة نشاط</h6>
                         </div>
                         <div class="card-body">
-                            <form class="form-horizontal" action="/insert_rapport" method="POST">
+                            <form class="form-horizontal" action="/insert_activity" method="POST">
                                 @csrf
+                                <input type ="hidden" value="{{$rapport->id_rapport}}" name="id_rapport" ?>
                                 <div class="form-group row">
                                     <label class="control-label col-lg-2 text-right" for="title">التاريخ</label>
                                     <div class="col-lg-8">
@@ -36,7 +37,7 @@
                                 <div class="form-group row">
                                     <label class="control-label col-lg-2 text-right" for="title"> نوع النشاط</label>
                                     <div class="col-lg-8">
-                                    <select class="form-control" onchange="changed_activity(this.value)">
+                                    <select class="form-control" name="activite" onchange="changed_activity(this.value)">
                                         <option> عمل تطبيقي</option>
                                         <option> أعمال نهاية الدراسة</option>
                                         <option> زيارات</option>    
@@ -46,27 +47,27 @@
                                 <div class="form-group row">
                                     <label class="control-label col-lg-2 text-right" for="title">  المستوى</label>
                                     <div class="col-lg-8">
-                                    <select class="form-control" >
-                                        <option> عمل تطبيقي</option>
-                                        <option> أعمال نهاية الدراسة</option>
-                                        <option> زيارات</option>    
+                                    <select name="niveau" class="form-control" >
+                                        @foreach($niveaux as $niveau)
+                                            <option value="{{$niveau->id_niveau}}"> {{$niveau->name_niveau}}</option>
+                                        @endforeach    
                                     </select>
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <label class="control-label col-lg-2 text-right" for="title">  المقياس</label>
                                     <div class="col-lg-8">
-                                    <select class="form-control" >
-                                        <option> عمل تطبيقي</option>
-                                        <option> أعمال نهاية الدراسة</option>
-                                        <option> زيارات</option>    
+                                    <select name="module" class="form-control" >
+                                        @foreach($modules as $module)
+                                            <option value="{{$module->id_module}}"> {{$module->name_module}}</option>
+                                        @endforeach 
                                     </select>
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <label class="control-label col-lg-2 text-right" for="title">  موضوع العمل</label>
                                     <div class="col-lg-8">
-                                    <textarea  name="sujet_trav" class="form-control" ></textarea>
+                                    <textarea required  name="sujet_trav" class="form-control" ></textarea>
                                     </div>
                                 </div>
 

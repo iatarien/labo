@@ -33,14 +33,27 @@ class RapportController extends Controller
     {   
         $user = Auth::user();
         $engineers = DB::table('users')->where('service',"Ingenieur")->get();
-        return view('rapport.ajouter1',['user' => $user,"engineers"=>$engineers]);
+        $labos = DB::table('labos')->get();
+        return view('rapport.ajouter1',['user' => $user,"labos"=>$labos]);
         
     }
     public function add_rapport_2($id)
     {   
         $user = Auth::user();
         $rapport = DB::table('rapport')->where('id_rapport',$id)->first();
-        return view('rapport.ajouter2',['user' => $user,"rapport"=>$rapport]);
+        $niveaux = DB::table('niveau')->get();
+        $modules = DB::table('module')->get();
+        return view('rapport.ajouter2',['user' => $user,"rapport"=>$rapport,
+        "niveaux"=>$niveaux,"modules"=>$modules]);
+        
+    }
+    public function add_outils($id)
+    {   
+        $user = Auth::user();
+        $rapport = DB::table('rapport')->where('id_rapport',$id)->first();
+        $tools = DB::table('tools')->get();
+        return view('rapport.ajouter_outils',['user' => $user,"rapport"=>$rapport,
+        "tools"=>$tools]);
         
     }
     public function insert_rapport(Request $request){
@@ -56,7 +69,22 @@ class RapportController extends Controller
         "engineer"=>$engineer,"user_id"=>$user]);
         return Redirect::to('/add_rapport_2/'.$id);
     }
+    public function insert_activity(Request $request){
+        $user = Auth::user()->id;
+        $id_rapport = $request['id_rapport'];
+        $type_activity = $request['activite'];
+        $niveau = $request['niveau'];
+        $module = $request['module'];
+        $sujet_trav = $request['sujet_trav'];
 
+        $id = DB::table('activity')->
+        insertGetId(["type_activity"=>$type_activity,
+        "niveau"=>$niveau,"module"=>$module,"sujet_trav"=>$sujet_trav]);
+        DB::table('rapport')->update(["activite"=>$id]);
+
+
+        return Redirect::to('/add_outils/'.$id_rapport);
+    }
     public function insert_op(Request $request){
         $user = Auth::user()->id;
         $secteur = $request['secteur'];

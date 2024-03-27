@@ -15,9 +15,11 @@ Route::get('/home', 'Auth\LoginController@logout');
 
 Route::get('/add_rapport', 'RapportController@add_rapport');
 Route::get('/add_rapport_2/{id}', 'RapportController@add_rapport_2');
+Route::get('/add_outils/{id}', 'RapportController@add_outils');
 
 Route::post('/insert_rapport', 'RapportController@insert_rapport');
-
+Route::post('/insert_activity', 'RapportController@insert_activity');
+Route::post('/insert_outils', 'RapportController@insert_outils');
 /** USER ROUTES **/
 Route::get('/users', 'UsersController@users');
 Route::post('/add_user', 'UsersController@add_user');

@@ -40,9 +40,9 @@
                                     <label class="control-label col-lg-2 text-right" for="title">المخبر</label>
                                     <div class="col-lg-8">
                                     <select name="labo" class="form-control">
-                                        <?php for($i = 1; $i<= 3; $i++){ ?>
-                                            <option value=" المخبر {{$i}}"> المخبر {{$i}}</option>
-                                        <?php } ?>
+                                        @foreach($labos as $labo)
+                                            <option value="{{$labo->id_labo}}"> {{$labo->name_labo}}</option>
+                                        @endforeach
                                     </select>
                                     </div>
                                 </div>
