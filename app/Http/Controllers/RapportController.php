@@ -51,9 +51,11 @@ class RapportController extends Controller
     {   
         $user = Auth::user();
         $rapport = DB::table('rapport')->where('id_rapport',$id)->first();
-        $tools = DB::table('tools')->get();
+        $devices = DB::table('tools')->where("type","جهاز")->get();
+        $matieres = DB::table('tools')->where("type","مادة")->get();
+        $chemicals = DB::table('chemical')->get();
         return view('rapport.ajouter_outils',['user' => $user,"rapport"=>$rapport,
-        "tools"=>$tools]);
+        "devices"=>$devices,"matieres"=>$matieres,"chemicals"=>$chemicals]);
         
     }
     public function insert_rapport(Request $request){
