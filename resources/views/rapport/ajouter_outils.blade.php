@@ -118,7 +118,7 @@
                             </div>
                             <div class="row">
                                 <div class="card-body col-md-6">
-                                    <form id="devices_form" class="form-horizontal" >
+                                    <form id="matieres_form" class="form-horizontal" >
                                         <div class="form-group row">
                                             <label class="control-label col-lg-4 text-right" for="title"> الأداة </label>
                                             <div class="col-lg-8">
@@ -168,7 +168,7 @@
                                         </div>
 
                                         <div class="form-group" align="center">
-                                        <button class="btn btn-primary" type="button" onclick="add_matiere()"> تثبيت</button>
+                                        <button class="btn btn-primary" type="button" onclick="add_matiere()">  تثبيت الأداة</button>
                                         </div>
                                     </from>
                                     
@@ -179,7 +179,7 @@
                                         <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                             <thead>
                                                 <tr style="background-color : lightblue">
-                                                    <th>الأداة </th>
+                                                    <th>الجهاز </th>
                                                     <th>تكفل</th>
                                                     <th>حالة قبل الإستلام</th>
                                                     <th>رأي المستلم</th>
@@ -201,12 +201,12 @@
                                 </div>
                                 <div class="row">
                                     <div class="card-body col-md-6">
-                                        <form id="devices_form" class="form-horizontal" >
+                                        <form id="chemicals_form" class="form-horizontal" onsubmit="return false;"> >
                                             
                                             <div class="form-group row">
                                                 <label class="control-label col-lg-4 text-right" for="title"> المادة </label>
                                                 <div class="col-lg-8">
-                                                <select class="form-control" id="device" name="device">
+                                                <select class="form-control" id="chemical" name="chemical">
                                                     @foreach($chemicals as $chemical)
                                                         <option value="{{$chemical->id_chemical}}1989raouf1989{{$chemical->name_chemical}}">{{$chemical->name_chemical}}</option>
                                                     @endforeach 
@@ -216,28 +216,21 @@
                                             <div class="form-group row">
                                                 <label class="control-label col-lg-4 text-right" for="title">  الوحدة</label>
                                                 <div class="col-lg-8">
-                                                <select class="form-control" name="charge" id="charge">
-                                                    <option>تكفل داخلي</option>
-                                                    <option>تكفل خارجي</option>  
-                                                </select>
+                                                    <input type="text" value="0" required id="unity" class="form-control">
                                                 </div>
                                             </div>
                                             <div class="form-group row">
                                                 <label class="control-label col-lg-4 text-right" for="title">   الكمية </label>
                                                 <div class="col-lg-8">
-                                                <select class="form-control" name="state_avant" id="state_avant" >
-                                                    <option>حالة جيدة</option>
-                                                    <option>في طور الصيانة</option>
-                                                    <option>عاطل</option>    
-                                                </select>
+                                                    <input type="number" value="0" required id="quantity" class="form-control">
                                                 </div>
                                             </div>
 
 
                                             <div class="form-group" align="center">
-                                                <button class="btn btn-primary" type="button" onclick="add_device()">إضافة جهاز</button>
+                                                <button class="btn btn-primary" type="submit" >تثبيت المادة</button>
                                             </div>
-                                        </from>
+                                        </form>
                                         
                                     </div>
                                 
@@ -246,15 +239,13 @@
                                             <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                                 <thead>
                                                     <tr style="background-color : lightblue">
-                                                        <th>الجهاز </th>
-                                                        <th>تكفل</th>
-                                                        <th>حالة قبل الإستلام</th>
-                                                        <th>رأي المستلم</th>
-                                                        <th>حالة بعد النشاط</th>
+                                                        <th>المادة </th>
+                                                        <th>الوحدة</th>
+                                                        <th>الكمية</th>
                                                     </tr>
                                                 </thead>
 
-                                                <tbody id="t_body_devices">
+                                                <tbody id="t_body_chemicals">
 
                                                 </tbody>
                                             </table>
@@ -288,6 +279,7 @@ function add_matiere(){
         "<th>"+state_after.value+"</th>"+
     "</tr>";
     document.getElementById('t_matiere_devices').innerHTML = str;
+    document.getElementById('matieres_form').reset();
 }
 function add_device(){
     device = document.getElementById('device');
@@ -307,7 +299,28 @@ function add_device(){
     "</tr>";
     document.getElementById('t_body_devices').innerHTML = str;
     document.getElementById('devices_form').reset();
-    document.getElementById('devices_form').reset();
+
+}
+function add_chemical(e){
+    e.preventDefault();
+    console.log(e);
+    
+    // alert('');
+    // chemical = document.getElementById('chemical');
+    // chemicals = chemical.value.split('1989raouf1989')[1];
+    // unity = document.getElementById('unity');
+    // quantity = document.getElementById('quantity');
+    // str = document.getElementById('t_body_chemicals').innerHTML;
+    // str +="<tr>"+
+    // "<tr>"+
+    //     "<td>"+chemicals+"</td>"+
+    //     "<th>"+unity.value+"</th>"+
+    //     "<th>"+quantity.value+"</th>"+
+    // "</tr>";
+    // document.getElementById('t_body_chemicals').innerHTML = str;
+    // document.getElementById('chemicals_form').reset();
+    // return false;
+
 }
 function changed_activity(val){
     if(val =="all"){
