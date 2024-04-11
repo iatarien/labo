@@ -93,7 +93,7 @@
                         
                             <div class="card-body col-md-6">
                                 <div class="table-responsive">
-                                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                    <table class="table table-bordered" id="devices_table" width="100%" cellspacing="0">
                                         <thead>
                                             <tr style="background-color : lightblue">
                                                 <th>الجهاز </th>
@@ -101,6 +101,7 @@
                                                 <th>حالة قبل الإستلام</th>
                                                 <th>رأي المستلم</th>
                                                 <th>حالة بعد النشاط</th>
+                                                <th>X</th>
                                             </tr>
                                         </thead>
 
@@ -176,7 +177,7 @@
                             
                                 <div class="card-body col-md-6">
                                     <div class="table-responsive">
-                                        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                        <table class="table table-bordered" id="matieres_table" width="100%" cellspacing="0">
                                             <thead>
                                                 <tr style="background-color : lightblue">
                                                     <th>الجهاز </th>
@@ -184,6 +185,7 @@
                                                     <th>حالة قبل الإستلام</th>
                                                     <th>رأي المستلم</th>
                                                     <th>حالة بعد النشاط</th>
+                                                    <th>X</th>
                                                 </tr>
                                             </thead>
 
@@ -203,7 +205,7 @@
                                 <br>
                                 <div class="form-group row">
                                     <label class="control-label col-lg-2 text-right" for="title">  قائمة المواد الكيميائية  </label>
-                                    <div class="col-lg-6">
+                                    <div class="col-lg-4">
                                     <select class="form-control" name="show_chemicals" id="show_chemicals" onchange="show_chemicals(this.value)">
                                         <option> لا شيئ</option>  
                                         <option value="show">اسم المواد</option>
@@ -218,9 +220,9 @@
                                             <div class="form-group row">
                                                 <label class="control-label col-lg-4 text-right" for="title"> المادة </label>
                                                 <div class="col-lg-8">
-                                                <select class="form-control" id="chemical" name="chemical">
+                                                <select class="form-control" id="chemical" onchange="load_u(this.value)" name="chemical">
                                                     @foreach($chemicals as $chemical)
-                                                        <option value="{{$chemical->id_chemical}}1989raouf1989{{$chemical->name_chemical}}">{{$chemical->name_chemical}}</option>
+                                                        <option value="{{$chemical->id_chemical}}1989raouf1989{{$chemical->name_chemical}}1989raouf1989{{$chemical->unity}}">{{$chemical->name_chemical}}</option>
                                                     @endforeach 
                                                 </select>
                                                 </div>
@@ -228,7 +230,11 @@
                                             <div class="form-group row">
                                                 <label class="control-label col-lg-4 text-right" for="title">  الوحدة</label>
                                                 <div class="col-lg-8">
+                                                    @if(isset($chemicals[0]->unity))
+                                                    <input type="text" value="{{$chemicals[0]->unity}}" required id="unity" class="form-control">
+                                                    @else
                                                     <input type="text" value="" required id="unity" class="form-control">
+                                                    @endif
                                                 </div>
                                             </div>
                                             <div class="form-group row">
@@ -248,12 +254,13 @@
                                 
                                     <div class="card-body col-md-6">
                                         <div class="table-responsive">
-                                            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                            <table class="table table-bordered" id="chemicals_table" width="100%" cellspacing="0">
                                                 <thead>
                                                     <tr style="background-color : lightblue">
                                                         <th>المادة </th>
                                                         <th>الوحدة</th>
                                                         <th>الكمية</th>
+                                                        <th>X</th>
                                                     </tr>
                                                 </thead>
 
@@ -266,6 +273,7 @@
                                     
                             </div>
                             <br><br>
+                            
                     </div>
 
                 </div>
@@ -273,24 +281,40 @@
 
             </div>
             <!-- End of Main Content -->
+            <div align="center">
+                <button onclick="submit_form()" class="btn btn-primary">التــالـــي </button>
+            </div>
 
-            @include('components.footer')
+<input type="hidden" id="id_rapport" value="{{$rapport->id_rapport}}">
+@include('components.footer')
+
 <script type="text/javascript">
+
+$.ajaxSetup({
+    headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    }
+});
+
 function add_matiere(){
     matiere = document.getElementById('matiere');
     matieres = matiere.value.split('1989raouf1989')[1];
-    id = matiere.value.split('1989raouf1989')[0];
+    id =Math.random();
+    ze_id = matiere.value.split('1989raouf1989')[0];
     charge = document.getElementById('charge_m');
     state_avant = document.getElementById('state_avant_m');
     avis = document.getElementById('avis_m');
     state_after = document.getElementById('state_after_m');
     str = document.getElementById('t_matiere_devices').innerHTML;
-    str +="<tr>"+
-        "<td>"+matieres+"</td>"+
-        "<th>"+charge.value+"</th>"+
-        "<th>"+state_avant.value+"</th>"+
-        "<th>"+avis.value+"</th>"+
-        "<th>"+state_after.value+"</th>"+
+    str +="<tr id='matiere_"+id+"'>"+
+        "<td style='display : none'>"+ze_id+"</td>"+    
+        "<td style='display : none'>أداة</td>"+   
+        "<th>"+matieres+"</th>"+
+        "<td>"+charge.value+"</td>"+
+        "<td>"+state_avant.value+"</td>"+
+        "<td>"+avis.value+"</td>"+
+        "<td>"+state_after.value+"</td>"+
+        "<th><button class='btn btn-danger' onclick=\"enlever('matiere_"+id+"')\">X</button></th>"+
     "</tr>";
     document.getElementById('t_matiere_devices').innerHTML = str;
     document.getElementById('matieres_form').reset();
@@ -298,18 +322,23 @@ function add_matiere(){
 function add_device(){
     device = document.getElementById('device');
     devices = device.value.split('1989raouf1989')[1];
-    id = device.value.split('1989raouf1989')[0];
+    id =Math.random();
+    ze_id = device.value.split('1989raouf1989')[0];
     charge = document.getElementById('charge');
     state_avant = document.getElementById('state_avant');
     avis = document.getElementById('avis');
     state_after = document.getElementById('state_after');
     str = document.getElementById('t_body_devices').innerHTML;
-    str +="<tr>"+
-        "<td>"+devices+"</td>"+
-        "<th>"+charge.value+"</th>"+
-        "<th>"+state_avant.value+"</th>"+
-        "<th>"+avis.value+"</th>"+
-        "<th>"+state_after.value+"</th>"+
+    str +="<tr id='device_"+id+"'>"+
+        "<td style='display : none'>"+ze_id+"</td>"+    
+        "<td style='display : none'>جهاز</td>"+   
+        "<th>"+devices+"</th>"+
+        "<td>"+charge.value+"</td>"+
+        "<td>"+state_avant.value+"</td>"+
+        "<td>"+avis.value+"</td>"+
+        "<td>"+state_after.value+"</td>"+
+        "<th><button class='btn btn-danger' onclick=\"enlever('device_"+id+"')\">X</button></th>"+
+        
     "</tr>";
     document.getElementById('t_body_devices').innerHTML = str;
     document.getElementById('devices_form').reset();
@@ -320,19 +349,25 @@ function add_chemical(e){
     console.log(e);
     chemical = document.getElementById('chemical');
     chemicals = chemical.value.split('1989raouf1989')[1];
-    id = chemical.value.split('1989raouf1989')[0];
+    id =Math.random();
+    ze_id = chemical.value.split('1989raouf1989')[0];
     unity = document.getElementById('unity');
     quantity = document.getElementById('quantity');
     str = document.getElementById('t_body_chemicals').innerHTML;
-    str +="<tr>"+
-        "<td>"+chemicals+"</td>"+
+    str +="<tr id='chemical_"+id+"'>"+
+        "<td style='display : none'>"+ze_id+"</td>"+    
+        "<th>"+chemicals+"</th>"+
         "<th>"+unity.value+"</th>"+
-        "<th>"+quantity.value+"</th>"+
+        "<td>"+quantity.value+"</td>"+
+        "<th><button class='btn btn-danger' onclick=\"enlever('chemical_"+id+"')\">X</button></th>"+
     "</tr>";
     document.getElementById('t_body_chemicals').innerHTML = str;
     document.getElementById('chemicals_form').reset();
     return false;
 
+}
+function enlever(id){
+    document.getElementById(id).remove();
 }
 function changed_activity(val){
     if(val =="all"){
@@ -348,6 +383,57 @@ function show_chemicals(val){
     }else{
         document.getElementById('chemicals_view').style.display ='none';
     } 
+}
+
+function submit_form(){
+    
+    insert_outils("devices","/insert_outils","");
+    insert_outils("matieres","/insert_outils","");
+    show = document.getElementById('show_chemicals').value;
+    if(show =="show"){
+        insert_outils("chemicals","/insert_chemicals","redirect");
+    }
+
+}
+
+function insert_outils(table,link,success){
+    const id_rapport = document.getElementById('id_rapport').value;
+    const trs = document.querySelectorAll('#'+table+'_table tr');
+    //console.log(trs);
+    const result = [];
+
+    for(let tr of trs) {
+    let th_td = tr.getElementsByTagName('td');
+    if (th_td.length == 0) {
+        th_td = tr.getElementsByTagName('th');
+    }
+    
+    let th_td_array = Array.from(th_td); // convert HTMLCollection to an Array
+    th_td_array = th_td_array.map(tag => tag.innerText); // get the text of each element
+    th_td_array.push(id_rapport);
+    result.push(th_td_array);
+    }
+    result.shift();
+
+    $.ajax({
+        url: link,
+        method: "POST", // First change type to method here    
+        data: {devices : result},
+        success: function(response) {
+            console.log(response);
+            if(success =="redirect"){
+                window.location.href = "/rapports";
+            }
+        },
+        error: function(error) {
+            console.log(error);
+        }
+    });
+}
+function load_u(){
+    chemical = document.getElementById('chemical');
+    u = chemical.value.split('1989raouf1989')[2];
+    document.getElementById('unity').value = u;;
 }
 window.onload = function(){
 	document.getElementById('loading').style.display = "none";

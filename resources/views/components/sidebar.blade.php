@@ -23,7 +23,7 @@
 
 <!-- Nav Item - Tables -->
 <li class="nav-item active">
-    <a class="nav-link" href="/">
+    <a class="nav-link" href="/rapports">
         <i class="fas fa-fw fa-copy"></i>
         <span>التقارير</span></a>
 </li>

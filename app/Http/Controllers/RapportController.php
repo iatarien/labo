@@ -29,6 +29,30 @@ class RapportController extends Controller
      * @return \Illuminate\Contracts\Support\Renderable
      */
 
+     
+    public function show_rapports($filters="")
+    {   
+        $user = Auth::user();
+        $rapports = DB::table('rapport')->join("activity","activity.id_activity","=","rapport.activite")->
+        leftjoin("users","rapport.engineer","users.id")->
+        join("niveau","activity.niveau","=","niveau.id_niveau")->join("module","module.id_module","activity.module")->get();
+        foreach($rapports as $rapport){
+            $outils = DB::table("outils")->join("tools","tools.id_tool","=","outils.id_outil")->where("outils.id_rapport",$rapport->id_rapport)->get();
+            $chemicals = DB::table("chemicals")->join("chemical","chemicals.id_chemical","=","chemical.id_chemical")->where("chemicals.id_rapport",$rapport->id_rapport)->get();
+            $n = count($outils);
+            $m = count($chemicals);
+            if($n == 0){
+                $n = 1;
+            }
+            $rapport->outils = $outils;
+            $rapport->chemicals = $chemicals;
+            $rapport->n = $n;
+            $rapport->m = $m;
+        }
+        return view('rapport.rapports',['user' => $user,"rapports"=>$rapports]);
+        
+    }
+     
     public function add_rapport()
     {   
         $user = Auth::user();
@@ -64,10 +88,11 @@ class RapportController extends Controller
         $time = $request['time'];
         $labo = $request['labo'];
         $activite = $request['activite'];
+        $ze_activity = $request['activite'];
         $engineer = $request['engineer'];
 
         $id = DB::table('rapport')->
-        insertGetId(["date"=>$date,"time"=>$time,"labo"=>$labo,"activite"=>$activite,
+        insertGetId(["date"=>$date,"time"=>$time,"labo"=>$labo,"activite"=>$activite,"ze_activity"=>$ze_activity,
         "engineer"=>$engineer,"user_id"=>$user]);
         return Redirect::to('/add_rapport_2/'.$id);
     }
@@ -82,83 +107,34 @@ class RapportController extends Controller
         $id = DB::table('activity')->
         insertGetId(["type_activity"=>$type_activity,
         "niveau"=>$niveau,"module"=>$module,"sujet_trav"=>$sujet_trav]);
-        DB::table('rapport')->update(["activite"=>$id]);
+        DB::table('rapport')->where("id_rapport",$id_rapport)->update(["activite"=>$id]);
 
 
         return Redirect::to('/add_outils/'.$id_rapport);
     }
-    public function insert_op(Request $request){
-        $user = Auth::user()->id;
-        $secteur = $request['secteur'];
-        $programme = $request['programme'];
-        $sous_programme = $request['sous_id'];
-        $annee = $request['annee'];
-        $numero = $request['numero'];
-        $intitule = $request['intitule'];
-        $intitule = $request['intitule'];
-        $date = $request['date'];
-        $source = $request['source'];
 
-        $AP_init = floatval($request['AP_init']);
-        $reevaluation = 0;
-        $AP_act = $AP_init;
-        $taux = 0;
-        $observations = "";        
-        $num_cloture = NULL;
-        $date_cloture = NULL;
-        $id = DB::table('projet')->
-        insertGetId(["secteur"=>$secteur,"programme"=>$programme,
-        "sous_programme"=>$sous_programme,'numero'=>$numero,'intitule'=>$intitule,
-        'intitule'=>$intitule,'date'=>$date,'source'=>$source,'annee'=>$annee,
-        'AP_init'=>$AP_init,'reevaluation'=>$reevaluation,'AP_act'=>$AP_act,
-        'taux'=>$taux,"observations"=>$observations,'num_cloture'=>$num_cloture,
-        'date_cloture'=>$date_cloture,"user_id"=>$user]);
-        return Redirect::to('/projet/all');
-    }
+    public function insert_outils(Request $request){
 
-    public function update_op(Request $request){
-        $user = Auth::user();
-        $id = $request['id_op'];
-        if($user->service =="Comptabilité"){
-            $secteur = $request['secteur'];
-            $programme = $request['programme'];
-            $sous_programme = $request['sous_id'];
-            $annee = $request['annee'];
-            $numero = $request['numero'];
-            $intitule = $request['intitule'];
-            $intitule = $request['intitule'];
-            $date = $request['date'];
-            $source = $request['source'];
-            $AP_init = floatval($request['AP_init']);
-            $reevaluation = floatval($request['reevaluation']);
-            $AP_act = floatval($AP_init) + $reevaluation;
-            $taux = $request['taux'];
-            $observations = $request['observations'];        
-            $num_cloture = $request['num_cloture'];
-            $date_cloture = $request['date_cloture'];
-            DB::table('projet')->where('id',$id)->
-            update(["secteur"=>$secteur,"programme"=>$programme,
-            "sous_programme"=>$sous_programme,'numero'=>$numero,'intitule'=>$intitule,
-            'intitule'=>$intitule,'date'=>$date,'source'=>$source,'annee'=>$annee,
-            'AP_init'=>$AP_init,'reevaluation'=>$reevaluation,'AP_act'=>$AP_act,
-            'taux'=>$taux,"observations"=>$observations,'num_cloture'=>$num_cloture,
-            'date_cloture'=>$date_cloture]);
-        }elseif($user->service =="Suivi"){
-            
-            $taux = $request['taux'];
-            $observations = $request['observations'];   
-            DB::table('projet')->where('id',$id)->
-            update(['taux'=>$taux,"observations"=>$observations]);
-        }elseif($user->service =="Cloture"){
-            $num_cloture = $request['num_cloture'];
-            $date_cloture = $request['date_cloture'];     
-
-            DB::table('projet')->where('id',$id)->
-            update(['num_cloture'=>$num_cloture,'date_cloture'=>$date_cloture]);
-
+        $devices = $request['devices'];
+        foreach($devices as $device){
+            $id = DB::table('outils')->
+            insertGetId(["id_rapport"=>$device[6],"id_outil"=>$device[0],"type_outil"=>$device[1],
+            "charge"=>$device[2],"state_av"=>$device[3],"avis"=>$device[4],"state_after"=>$device[5]]);
         }
- 
-        return Redirect::to('/projet/all');
-    }
-    
+        return "success";
+    }   
+
+    public function insert_chemicals(Request $request){
+
+        $devices = $request['devices'];
+        foreach($devices as $device){
+            DB::table("chemical")->where("id_chemical",$device[0])->decrement("quantity",$device[1]);
+            $quantity_now = DB::table("chemical")->where("id_chemical",$device[0])->first()->quantity;
+            $id = DB::table('chemicals')->
+            insertGetId(["id_rapport"=>$device[2],"id_chemical"=>$device[0],"qty"=>$device[1],"quantity_now"=>$quantity_now]);
+            
+            
+        }
+        return "success";
+    }  
 }

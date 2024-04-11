@@ -30,9 +30,12 @@
                                     <label class="control-label col-lg-2 text-right" for="title">الوقت</label>
                                     <div class="col-lg-8">
                                     <select name="time" class="form-control">
-                                        <?php for($i = 8; $i<= 20; $i++){ ?>
-                                            <option>{{$i}}:00</option>
-                                        <?php } ?>
+                                            <option>8:00 - 9:30</option>
+                                            <option>9:30 - 11:00</option>
+                                            <option>11:00 - 12:30</option>
+                                            <option>12:30 - 14:00</option>
+                                            <option>14:00 - 15:30</option>
+                                            <option>15:30 - 17:00</option>
                                     </select>
                                     </div>
                                 </div>
