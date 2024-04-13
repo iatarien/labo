@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.0.2
+-- version 5.2.0
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Apr 09, 2024 at 09:21 AM
--- Server version: 5.7.31
--- PHP Version: 7.4.9
+-- Generation Time: Apr 13, 2024 at 01:09 PM
+-- Server version: 5.7.40
+-- PHP Version: 7.4.33
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -35,7 +35,7 @@ CREATE TABLE IF NOT EXISTS `activity` (
   `module` int(11) DEFAULT NULL,
   `sujet_trav` text,
   PRIMARY KEY (`id_activity`)
-) ENGINE=MyISAM AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `activity`
@@ -47,7 +47,12 @@ INSERT INTO `activity` (`id_activity`, `type_activity`, `niveau`, `module`, `suj
 (4, 'عمل تطبيقي', 1, 1, NULL),
 (5, 'عمل تطبيقي', 1, 1, 'aaaaaaaaaaaa'),
 (6, 'عمل تطبيقي', 1, 1, 'abc'),
-(7, 'عمل تطبيقي', 1, 1, 'aaa');
+(7, 'عمل تطبيقي', 1, 1, 'aaa'),
+(8, 'عمل تطبيقي', 2, 2, 'lol'),
+(9, 'عمل تطبيقي', 2, 2, 'la'),
+(10, 'عمل تطبيقي', 1, 1, 'aaaaa'),
+(11, 'عمل تطبيقي', 1, 1, 'z'),
+(12, 'عمل تطبيقي', 1, 1, '&&&&&&&&');
 
 -- --------------------------------------------------------
 
@@ -80,15 +85,40 @@ CREATE TABLE IF NOT EXISTS `chemical` (
   `quantity` double NOT NULL,
   `unity` varchar(50) NOT NULL,
   PRIMARY KEY (`id_chemical`)
-) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `chemical`
 --
 
 INSERT INTO `chemical` (`id_chemical`, `name_chemical`, `quantity`, `unity`) VALUES
-(1, 'H20', 10000, 'ml'),
-(2, 'C02', 50, 'ml');
+(3, 'H20', 990, 'ml'),
+(4, 'CO2', 0, 'm3');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `chemicals`
+--
+
+DROP TABLE IF EXISTS `chemicals`;
+CREATE TABLE IF NOT EXISTS `chemicals` (
+  `id_chemicals` int(11) NOT NULL AUTO_INCREMENT,
+  `id_rapport` int(11) NOT NULL,
+  `id_chemical` int(11) NOT NULL,
+  `qty` double NOT NULL,
+  `quantity_now` double NOT NULL,
+  PRIMARY KEY (`id_chemicals`)
+) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `chemicals`
+--
+
+INSERT INTO `chemicals` (`id_chemicals`, `id_rapport`, `id_chemical`, `qty`, `quantity_now`) VALUES
+(1, 12, 3, 2, 0),
+(2, 12, 4, 1, 0),
+(4, 16, 4, 50, 0);
 
 -- --------------------------------------------------------
 
@@ -156,6 +186,40 @@ INSERT INTO `niveau` (`id_niveau`, `name_niveau`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `outils`
+--
+
+DROP TABLE IF EXISTS `outils`;
+CREATE TABLE IF NOT EXISTS `outils` (
+  `id_outils` int(11) NOT NULL AUTO_INCREMENT,
+  `id_rapport` int(11) NOT NULL,
+  `id_outil` int(11) NOT NULL,
+  `type_outil` varchar(100) NOT NULL,
+  `charge` varchar(100) NOT NULL,
+  `state_av` varchar(100) NOT NULL,
+  `avis` varchar(100) NOT NULL,
+  `state_after` varchar(100) NOT NULL,
+  PRIMARY KEY (`id_outils`)
+) ENGINE=MyISAM AUTO_INCREMENT=18 DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `outils`
+--
+
+INSERT INTO `outils` (`id_outils`, `id_rapport`, `id_outil`, `type_outil`, `charge`, `state_av`, `avis`, `state_after`) VALUES
+(1, 11, 1, 'جهاز', 'تكفل داخلي', 'حالة جيدة', 'بدون تحفظ', 'بدون تحفظ'),
+(2, 11, 1, 'جهاز', 'تكفل داخلي', 'حالة جيدة', 'بدون تحفظ', 'بدون تحفظ'),
+(3, 11, 2, 'جهاز', 'تكفل داخلي', 'حالة جيدة', 'بدون تحفظ', 'بدون تحفظ'),
+(4, 11, 2, 'جهاز', 'تكفل خارجي', 'حالة جيدة', 'بدون تحفظ', 'بدون تحفظ'),
+(11, 12, 4, 'أداة', 'تكفل داخلي', 'حالة جيدة', 'بدون تحفظ', 'بدون تحفظ'),
+(10, 12, 3, 'أداة', 'تكفل داخلي', 'حالة جيدة', 'بدون تحفظ', 'بدون تحفظ'),
+(9, 12, 1, 'جهاز', 'تكفل داخلي', 'حالة جيدة', 'بدون تحفظ', 'بدون تحفظ'),
+(17, 16, 3, 'أداة', 'تكفل داخلي', 'حالة جيدة', 'بدون تحفظ', 'بدون تحفظ'),
+(16, 16, 1, 'جهاز', 'تكفل داخلي', 'حالة جيدة', 'بدون تحفظ', 'بدون تحفظ');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `rapport`
 --
 
@@ -163,24 +227,23 @@ DROP TABLE IF EXISTS `rapport`;
 CREATE TABLE IF NOT EXISTS `rapport` (
   `id_rapport` int(11) NOT NULL AUTO_INCREMENT,
   `date` date NOT NULL,
-  `time` varchar(10) NOT NULL,
+  `time` varchar(50) NOT NULL,
   `labo` int(11) NOT NULL,
   `activite` int(11) NOT NULL,
+  `ze_activity` varchar(100) NOT NULL,
   `engineer` varchar(10) NOT NULL,
   `user_id` int(11) NOT NULL,
   PRIMARY KEY (`id_rapport`)
-) ENGINE=MyISAM AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=17 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `rapport`
 --
 
-INSERT INTO `rapport` (`id_rapport`, `date`, `time`, `labo`, `activite`, `engineer`, `user_id`) VALUES
-(5, '2024-03-27', '8:00', 2, 7, 'all', 1),
-(6, '2024-03-27', '8:00', 1, 7, 'all', 1),
-(7, '2024-03-28', '8:00', 1, 7, 'all', 1),
-(8, '2024-04-01', '8:00', 1, 7, 'all', 1),
-(9, '2024-04-02', '8:00', 1, 7, 'all', 1);
+INSERT INTO `rapport` (`id_rapport`, `date`, `time`, `labo`, `activite`, `ze_activity`, `engineer`, `user_id`) VALUES
+(12, '2024-04-11', '11:00 - 12:30', 1, 10, 'نشاط بيداغوجي', 'all', 1),
+(11, '2024-04-11', '14:00 - 15:30', 2, 11, 'نشاط بيداغوجي', '1', 1),
+(16, '2024-04-11', '12:30 - 14:00', 1, 12, 'نشاط بيداغوجي', 'all', 1);
 
 -- --------------------------------------------------------
 
