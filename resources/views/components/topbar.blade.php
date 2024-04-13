@@ -26,7 +26,7 @@
                             <!-- Dropdown - User Information -->
                             <div dir="rtl" class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                 aria-labelledby="userDropdown">
-                                <a style="text-align : right; padding-right : 10px;" class="dropdown-item" href="modify_user/{{$user->id}}">
+                                <a style="text-align : right; padding-right : 10px;" class="dropdown-item" href="/modify_user/{{$user->id}}">
                                     <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                                     الإعدادت
                                 </a>
