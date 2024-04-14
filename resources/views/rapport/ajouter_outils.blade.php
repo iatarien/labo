@@ -282,7 +282,7 @@
             </div>
             <!-- End of Main Content -->
             <div align="center">
-                <button onclick="submit_form()" class="btn btn-primary">التــالـــي </button>
+                <button onclick="submit_form()" class="btn btn-primary">طباعة التقرير اليومي </button>
             </div>
 
 <input type="hidden" id="id_rapport" value="{{$rapport->id_rapport}}">

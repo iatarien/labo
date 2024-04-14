@@ -35,7 +35,10 @@ class RapportController extends Controller
         $user = Auth::user();
         $rapports = DB::table('rapport')->join("activity","activity.id_activity","=","rapport.activite")->
         leftjoin("users","rapport.engineer","users.id")->
-        join("niveau","activity.niveau","=","niveau.id_niveau")->join("module","module.id_module","activity.module")->get();
+        join("niveau","activity.niveau","=","niveau.id_niveau")->
+        join("module","module.id_module","activity.module")->
+        join("labos","labos.id_labo","rapport.labo")->
+        orderBy("date","ASC")->orderBy("time","ASC")->get();
         foreach($rapports as $rapport){
             $outils = DB::table("outils")->join("tools","tools.id_tool","=","outils.id_outil")->where("outils.id_rapport",$rapport->id_rapport)->get();
             $chemicals = DB::table("chemicals")->join("chemical","chemicals.id_chemical","=","chemical.id_chemical")->where("chemicals.id_rapport",$rapport->id_rapport)->get();
@@ -116,24 +119,27 @@ class RapportController extends Controller
     public function insert_outils(Request $request){
 
         $devices = $request['devices'];
-        foreach($devices as $device){
-            $id = DB::table('outils')->
-            insertGetId(["id_rapport"=>$device[6],"id_outil"=>$device[0],"type_outil"=>$device[1],
-            "charge"=>$device[2],"state_av"=>$device[3],"avis"=>$device[4],"state_after"=>$device[5]]);
+        if($devices != "" && $devices != NULL){
+            foreach($devices as $device){
+                $id = DB::table('outils')->
+                insertGetId(["id_rapport"=>$device[6],"id_outil"=>$device[0],"type_outil"=>$device[1],
+                "charge"=>$device[2],"state_av"=>$device[3],"avis"=>$device[4],"state_after"=>$device[5]]);
+            }
         }
+        
         return "success";
     }   
 
     public function insert_chemicals(Request $request){
 
         $devices = $request['devices'];
-        foreach($devices as $device){
-            DB::table("chemical")->where("id_chemical",$device[0])->decrement("quantity",$device[1]);
-            $quantity_now = DB::table("chemical")->where("id_chemical",$device[0])->first()->quantity;
-            $id = DB::table('chemicals')->
-            insertGetId(["id_rapport"=>$device[2],"id_chemical"=>$device[0],"qty"=>$device[1],"quantity_now"=>$quantity_now]);
-            
-            
+        if($devices != "" && $devices != NULL){
+            foreach($devices as $device){
+                DB::table("chemical")->where("id_chemical",$device[0])->decrement("quantity",$device[1]);
+                $quantity_now = DB::table("chemical")->where("id_chemical",$device[0])->first()->quantity;
+                $id = DB::table('chemicals')->
+                insertGetId(["id_rapport"=>$device[2],"id_chemical"=>$device[0],"qty"=>$device[1],"quantity_now"=>$quantity_now]);
+            }
         }
         return "success";
     }  

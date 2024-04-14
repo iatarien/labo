@@ -1,5 +1,13 @@
 @include('components.header')
-
+<style type="text/css">
+    .table-bordered th, .table-bordered td {
+        border: 1px solid black;
+        vertical-align : middle;
+    }
+    .table thead th {
+        border-bottom : 1px solid black;
+    }
+</style>
         @include('components.sidebar')
 
         <!-- Content Wrapper -->
@@ -20,11 +28,12 @@
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
-                                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0" style="text-align : center; color : black;">
+                                <table class="table table-bordered" id="dataTable" cellspacing="0" 
+                                style="width : 1200px; text-align : center; color : black; font-size : 14px;">
                                     <thead style="background-color : lightblue;">
                                         <tr>
-                                            <th style="width : 8%;">التاریخ</th>
-                                            <th style="width : 8%;">الوقت</th>
+                                            <th style="width : 120px">التاريخ و الوقت</th>
+                                            <th>المخبر</th>
                                             <th>المھندس المتابع</th>
                                             <th>النشاط</th>
                                             <th>نوعه</th>
@@ -43,8 +52,9 @@
                                     <tbody>
                                         @foreach($rapports as $rapport)
                                         <tr>
-                                            <td rowspan="{{$rapport->n}}">{{$rapport->date}}</td>
-                                            <td rowspan="{{$rapport->n}}">{{$rapport->time}}</td>
+                                            <td rowspan="{{$rapport->n}}">{{$rapport->date}}
+                                                <br><strong>{{$rapport->time}}</strong></td>
+                                            <td rowspan="{{$rapport->n}}">{{$rapport->name_labo}}</td>
                                             @if($rapport->engineer =="all")
                                             <td rowspan="{{$rapport->n}}">جميع المهندسين</td>
                                             @else
@@ -57,7 +67,7 @@
                                             <td rowspan="{{$rapport->n}}">{{$rapport->sujet_trav}}</td>
                                             @if(isset($rapport->outils[0]))
                                             <?php $outil = $rapport->outils[0]; ?>
-                                            <td>{{$outil->name_tool}}</td>
+                                            <td>{{$outil->name_tool}}<br><span style="color: blue">{{$outil->inventaire}}</span></td>
                                             <td>{{$outil->charge}}</td>
                                             <td>{{$outil->state_av}}</td>
                                             <td>{{$outil->avis}}</td>
@@ -73,12 +83,17 @@
                                             @if($rapport->m == 0)
                                             لا شيئ
                                             @endif
+                                            <?php $max = count($rapport->chemicals); $i =0; ?>
                                             @foreach($rapport->chemicals as $chemical)
                                                 <span>{{$chemical->name_chemical}} ({{$chemical->qty}} {{$chemical->unity}})</span>
                                                 @if($chemical->quantity_now == 0)
                                                 <span style="color : red">(استهلكت)</span>
                                                 @endif
-                                                <hr>
+                                                
+                                                <?php $i++; ?>
+                                                @if( $i < $max )
+                                                    <hr style="background-color : black;">
+                                                @endif
                                             @endforeach
                                             </td>
                                         </tr>
@@ -87,7 +102,7 @@
                                             @foreach($outils as $outil)
                                             <?php $outil = (object) $outil; ?>
                                             <tr>
-                                                <td>{{$outil->name_tool}}</td>
+                                            <td>{{$outil->name_tool}}<br><span style="color: blue">{{$outil->inventaire}}</span></td>
                                                 <td>{{$outil->charge}}</td>
                                                 <td>{{$outil->state_av}}</td>
                                                 <td>{{$outil->avis}}</td>
