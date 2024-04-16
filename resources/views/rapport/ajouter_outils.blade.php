@@ -41,7 +41,7 @@
                                         <div class="col-lg-8">
                                         <select class="form-control" id="device" name="device">
                                             @foreach($devices as $device)
-                                                <option value="{{$device->id_tool}}1989raouf1989{{$device->name_tool}}">{{$device->name_tool}}</option>
+                                                <option value="{{$device->id_tool}}1989raouf1989{{$device->name_tool.'<br>'.$device->inventaire}}">{{$device->name_tool}} ({{$device->inventaire}})</option>
                                             @endforeach 
                                         </select>
                                         </div>
@@ -125,7 +125,7 @@
                                             <div class="col-lg-8">
                                             <select class="form-control" id="matiere" name="matiere">
                                                 @foreach($matieres as $matiere)
-                                                    <option value="{{$matiere->id_tool}}1989raouf1989{{$matiere->name_tool}}">{{$matiere->name_tool}}</option>
+                                                    <option value="{{$matiere->id_tool}}1989raouf1989{{$matiere->name_tool.'<br>'.$matiere->inventaire}}">{{$matiere->name_tool}} ({{$matiere->inventaire}})</option>
                                                 @endforeach 
                                             </select>
                                             </div>
@@ -152,7 +152,7 @@
                                         <div class="form-group row">
                                             <label class="control-label col-lg-4 text-right" for="title">رأي المستلم</label>
                                             <div class="col-lg-8">
-                                            <select class="form-control" name="avis" id="avis_m">
+                                            <select class="form-control" name="avis" onchange="avis_changed(this.value)" id="avis_m">
                                                 <option>بدون تحفظ</option> 
                                                 <option>بتحفظ</option>
                                             </select>
@@ -435,7 +435,21 @@ function load_u(){
     u = chemical.value.split('1989raouf1989')[2];
     document.getElementById('unity').value = u;;
 }
+function avis_changed(val){
+    if(val =="بتحفظ"){
+        add_reserve(1,1);
+    }
+}
+function add_reserve(rapport,outil){
+  var myWindow = popupwindow("/add_reserve/"+rapport+"/"+outil, " التحفظ", "800","500");
+}
+function popupwindow(url, title, w, h) {
+  var left = (screen.width/2)-(w/2);
+  var top = (screen.height/2)-(h/2);
+  return window.open(url, title, 'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=no, copyhistory=no, width='+w+', height='+h+', top='+top+', left='+left);
+} 
 window.onload = function(){
 	document.getElementById('loading').style.display = "none";
 };
+
 </script>

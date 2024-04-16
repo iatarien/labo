@@ -7,6 +7,13 @@
     .table thead th {
         border-bottom : 1px solid black;
     }
+    .table-responsive {
+        transform: rotateX(180deg);
+        overflow-x: auto;
+    } 
+    .table {
+        transform: rotateX(180deg);
+    }
 </style>
         @include('components.sidebar')
 
@@ -27,7 +34,7 @@
                             <h6 class="m-0 font-weight-bold text-primary">التقرير اليومي</h6>
                         </div>
                         <div class="card-body">
-                            <div class="table-responsive">
+                            <div class="table-responsive" >
                                 <table class="table table-bordered" id="dataTable" cellspacing="0" 
                                 style="width : 1200px; text-align : center; color : black; font-size : 14px;">
                                     <thead style="background-color : lightblue;">

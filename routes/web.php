@@ -31,8 +31,8 @@ Route::post('/update_user', 'UsersController@update_user');
 Route::post('/delete_user', 'UsersController@delete_user');
 Route::post('/chnage_profile_photo','UsersController@chnage_profile_photo');
 
-/** OPERATIONS ROUTES */
-Route::get('/', 'HomeController@index');
+/** RESERVES ROUTES */
+Route::get('/add_reserve/{rapport}/{outil}', 'ReserveController@add_reserve');
 
 
 
