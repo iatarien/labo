@@ -29,28 +29,28 @@ class ReserveController extends Controller
      * @return \Illuminate\Contracts\Support\Renderable
      */
      
-    public function add_reserve($rapport="",$outil="")
+    public function add_reserve($rapport="",$outil="",$state="")
     {   
         $user = Auth::user();
-        $rapports = DB::table('rapport')->join("activity","activity.id_activity","=","rapport.activite")->
-        leftjoin("users","rapport.engineer","users.id")->
-        join("niveau","activity.niveau","=","niveau.id_niveau")->
-        join("module","module.id_module","activity.module")->
-        join("labos","labos.id_labo","rapport.labo")->
-        orderBy("date","ASC")->orderBy("time","ASC")->get();
-        foreach($rapports as $rapport){
-            $outils = DB::table("outils")->join("tools","tools.id_tool","=","outils.id_outil")->where("outils.id_rapport",$rapport->id_rapport)->get();
-            $chemicals = DB::table("chemicals")->join("chemical","chemicals.id_chemical","=","chemical.id_chemical")->where("chemicals.id_rapport",$rapport->id_rapport)->get();
-            $n = count($outils);
-            $m = count($chemicals);
-            if($n == 0){
-                $n = 1;
-            }
-            $rapport->outils = $outils;
-            $rapport->chemicals = $chemicals;
-            $rapport->n = $n;
-            $rapport->m = $m;
-        }
-        return view('rapport.rapports',['user'=> $user,"rapports"=>$rapports]);
+
+        return view('reserves.add_reserve',['user'=> $user,"rapport"=>$rapport,
+        "outil"=>$outil,"state"=>$state]);
+
+    }
+    public function insert_reserve(Request $request)
+    {   
+        $user = Auth::user();
+        $rapport = $request["rapport"];
+        $outil = $request["outil"];
+        $state = $request["state"];
+        
+        $id = DB::table('reserves')->
+        insertGetId(["rapport"=>$rapport,
+        "outil"=>$outil,"state"=>$state,"user"=>$user->id]);
+
+        return Redirect::to('/close');
+    }
+    public function close(){
+        return view('close');
     }
 }

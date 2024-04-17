@@ -12,6 +12,9 @@
 */
 
 Route::get('/home', 'Auth\LoginController@logout');
+Route::get('/', 'HomeController@index');
+Route::get('/close', 'ReserveController@close');
+
 
 Route::get('/rapports/{filters?}', 'RapportController@show_rapports');
 Route::get('/add_rapport', 'RapportController@add_rapport');
@@ -32,8 +35,9 @@ Route::post('/delete_user', 'UsersController@delete_user');
 Route::post('/chnage_profile_photo','UsersController@chnage_profile_photo');
 
 /** RESERVES ROUTES */
-Route::get('/add_reserve/{rapport}/{outil}', 'ReserveController@add_reserve');
+Route::get('/add_reserve/{rapport}/{outil}/{state}', 'ReserveController@add_reserve');
 
+Route::post('/insert_reserve', 'ReserveController@insert_reserve');
 
 
 /** AUTH ROUTES **/

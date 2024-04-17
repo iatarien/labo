@@ -34,7 +34,7 @@
                                 </div>
                                 <form id="devices_form" class="form-horizontal" >
                                     @csrf
-                                    <input type ="hidden" value="{{$rapport->id_rapport}}" name="id_rapport" ?>
+                                    <input type ="hidden" value="{{$rapport->id_rapport}}" name="id_rapport" id="id_rapport" ?>
                                     
                                     <div class="form-group row">
                                         <label class="control-label col-lg-4 text-right" for="title"> الجهاز </label>
@@ -68,7 +68,7 @@
                                     <div class="form-group row">
                                         <label class="control-label col-lg-4 text-right" for="title">رأي المستلم</label>
                                         <div class="col-lg-8">
-                                        <select class="form-control" name="avis" id="avis">
+                                        <select class="form-control" name="avis" id="avis" onchange="avis_changed(this.value,'tool','avis')">
                                             <option>بدون تحفظ</option> 
                                             <option>بتحفظ</option>
                                         </select>
@@ -77,7 +77,7 @@
                                     <div class="form-group row">
                                         <label class="control-label col-lg-4 text-right" for="title"> الحالة بعد النشاط </label>
                                         <div class="col-lg-8">
-                                        <select class="form-control" name="state_after" id="state_after">
+                                        <select class="form-control" name="state_after" id="state_after" onchange="avis_changed(this.value,'tool','after')">
                                             <option>بدون تحفظ</option>  
                                             <option>بتحفظ</option>
                                         </select>
@@ -152,7 +152,7 @@
                                         <div class="form-group row">
                                             <label class="control-label col-lg-4 text-right" for="title">رأي المستلم</label>
                                             <div class="col-lg-8">
-                                            <select class="form-control" name="avis" onchange="avis_changed(this.value)" id="avis_m">
+                                            <select class="form-control" name="avis" onchange="avis_changed(this.value,'matiere','avis')" id="avis_m">
                                                 <option>بدون تحفظ</option> 
                                                 <option>بتحفظ</option>
                                             </select>
@@ -161,7 +161,7 @@
                                         <div class="form-group row">
                                             <label class="control-label col-lg-4 text-right" for="title"> الحالة بعد النشاط </label>
                                             <div class="col-lg-8">
-                                            <select class="form-control" name="state_after" id="state_after_m">
+                                            <select class="form-control" name="state_after" id="state_after_m" onchange="avis_changed(this.value,'matiere','after')">
                                                 <option>بدون تحفظ</option>  
                                                 <option>بتحفظ</option>
                                             </select>
@@ -435,13 +435,21 @@ function load_u(){
     u = chemical.value.split('1989raouf1989')[2];
     document.getElementById('unity').value = u;;
 }
-function avis_changed(val){
+function avis_changed(val,type,state){
+    rapport = document.getElementById('id_rapport').value;
+    if(type=="tool"){
+        devices = document.getElementById('device').value;
+    }else{
+        devices = document.getElementById('matiere').value;
+    }
+    
+    device = devices.split('1989raouf1989')[0];
     if(val =="بتحفظ"){
-        add_reserve(1,1);
+        add_reserve(rapport,device,state);
     }
 }
-function add_reserve(rapport,outil){
-  var myWindow = popupwindow("/add_reserve/"+rapport+"/"+outil, " التحفظ", "800","500");
+function add_reserve(rapport,outil,state){
+  var myWindow = popupwindow("/add_reserve/"+rapport+"/"+outil+"/"+state, " التحفظ", "3080","2720");
 }
 function popupwindow(url, title, w, h) {
   var left = (screen.width/2)-(w/2);
