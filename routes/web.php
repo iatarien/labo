@@ -39,6 +39,13 @@ Route::get('/add_reserve/{rapport}/{outil}/{state}', 'ReserveController@add_rese
 
 Route::post('/insert_reserve', 'ReserveController@insert_reserve');
 
+Route::get('/reserve_before/{id?}', 'ReserveController@reserve_before');
+Route::get('/reserve_after/{id?}', 'ReserveController@reserve_after');
+Route::get('/demande_access/{id?}', 'ReserveController@demande_access');
+Route::get('/engagement/{id?}', 'ReserveController@engagement');
+Route::get('/visite/{id?}', 'ReserveController@visite');
+Route::get('/prise/{id?}', 'ReserveController@prise');
+Route::get('/after_prise/{id?}', 'ReserveController@after_prise');
 
 /** AUTH ROUTES **/
 Auth::routes();

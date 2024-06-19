@@ -65,6 +65,16 @@
                                     </div>
                                 </div>
                                 <div class="form-group row">
+                                    <label class="control-label col-lg-2 text-right" for="title">  الأستاذ</label>
+                                    <div class="col-lg-8">
+                                    <select name="teacher" class="form-control" >
+                                        @foreach($teachers as $teacher)
+                                            <option value="{{$teacher->id_teacher}}"> {{$teacher->name_teacher}}</option>
+                                        @endforeach 
+                                    </select>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
                                     <label class="control-label col-lg-2 text-right" for="title">  موضوع العمل</label>
                                     <div class="col-lg-8">
                                     <textarea required  name="sujet_trav" class="form-control" ></textarea>

@@ -37,6 +37,41 @@ class ReserveController extends Controller
         "outil"=>$outil,"state"=>$state]);
 
     }
+    public function reserve_before($id="")
+    {   
+        $user = Auth::user();
+        return view('attestations.reserve_before',['user'=> $user]);
+    }
+    public function reserve_after($id="")
+    {   
+        $user = Auth::user();
+        return view('attestations.reserve_after',['user'=> $user]);
+    }
+    public function demande_access($id="")
+    {   
+        $user = Auth::user();
+        return view('attestations.demande_access',['user'=> $user]);
+    }
+    public function engagement($id="")
+    {   
+        $user = Auth::user();
+        return view('attestations.engagement',['user'=> $user]);
+    }
+    public function visite($id="")
+    {   
+        $user = Auth::user();
+        return view('attestations.visite',['user'=> $user]);
+    }
+    public function prise($id="")
+    {   
+        $user = Auth::user();
+        return view('attestations.prise',['user'=> $user]);
+    }
+    public function after_prise($id="")
+    {   
+        $user = Auth::user();
+        return view('attestations.after_prise',['user'=> $user]);
+    }
     public function insert_reserve(Request $request)
     {   
         $user = Auth::user();

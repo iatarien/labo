@@ -70,8 +70,9 @@ class RapportController extends Controller
         $rapport = DB::table('rapport')->where('id_rapport',$id)->first();
         $niveaux = DB::table('niveau')->get();
         $modules = DB::table('module')->get();
+        $teachers = DB::table('teachers')->get();
         return view('rapport.ajouter2',['user' => $user,"rapport"=>$rapport,
-        "niveaux"=>$niveaux,"modules"=>$modules]);
+        "niveaux"=>$niveaux,"modules"=>$modules,"teachers"=>$teachers]);
         
     }
     public function add_outils($id)
