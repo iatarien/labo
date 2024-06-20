@@ -31,7 +31,7 @@
 </style>
 
 </head>
-<body contenteditable="false">
+<body contenteditable="true" dir="rtl">
 <section  style="background-color: white; text-align: center; font-size: 13.5px; margin: 45px;" id="fiche">
 	<div id="fiche_top">
         <div style="  display: inline-block; width : 100%">
@@ -56,10 +56,10 @@
             : تامنغست في  
 			<h3>
 		</div>
-		<?php $v ="......."; ?>
-		<div style="  display: inline-block; float: right; width : 45%;">
+		<?php $v = "0".$num; ?>
+		<div style="  display: inline-block; float: right; width : 45%;" contenteditable="false">
             <h3 style="text-align : right;">
-            رقم القيــــد: {{$v}} ك ع ت / م ك ب ج/ {{Date('Y')}} 
+            رقم القيــــد: <span id="num" contenteditable="true">{{$v}}</span> ك ع ت / م ك ب ج/ {{$year}} 
 			</h3>
 		</div>
         <br><br><br><br>
@@ -69,9 +69,9 @@
             </h1>
             <br>
             <p style="font-size : 5mm; text-align : justify;"> 
-			يؤسفنا أن نعلمكم انه بتاريخ ........................ 
+			يؤسفنا أن نعلمكم انه بتاريخ {{$rapport->date}} 
 			عند استلام الحاجيات الخاصة بالعمل التطبيقي
-			لمقياس .......... ، مستوى : ..................
+			لمقياس {{$activity->name_module}} ، مستوى : {{$activity->name_niveau}}
 			تم تسجيل التحفظات التالية : <br>
 			1 - .......................... <br>
 			2 - .......................... <br>
@@ -84,14 +84,14 @@
 		</div>
 		<br><br><br><br>
         <div style="  display: inline-block; float: left; width : 45%;" dir="ltr">
-            <p style="text-align : center; font-size : 5mm;">
+            <p style="text-align : center; font-size : 5mm; font-weight : bold;">
 			رئيس المخابر 
 			</p>
 		</div>
 		<?php $v ="......."; ?>
 		<div style="  display: inline-block; float: right; width : 45%;">
             <p style="text-align : right; font-size : 5mm;">
-			.................... : الأستاذ  
+			<strong> الأستاذ : </strong> <br>{{$activity->name_teacher}}  
 			</p>
 		</div>
 	</div>
@@ -99,7 +99,7 @@
 
 <br><br><br><br>
 <div align="center">
-	<button id="bouton" style="
+<button id="bouton" style="
 	  background-color: lightgray; /* Green */
 	  border: none;
 	  color: black;
@@ -110,9 +110,8 @@
 	  display: inline-block;
 	  font-size: 16px;" 
   onclick="printdiv('fiche')"> طباعة </button>
-
 <button id="bouton_2" style="
-	  background-color: skyblue; /* Green */
+	  background-color: lightgreen; /* Green */
 	  border: none;
 	  color: black;
 	  cursor: pointer;
@@ -123,6 +122,17 @@
 	  font-size: 16px;" 
   onclick=location.href="/reserves/"> رجوع </button>
 
+  <button id="bouton" style="
+	  background-color: lightblue; /* Green */
+	  border: none;
+	  color: black;
+	  cursor: pointer;
+	  padding: 15px 32px;
+	  text-align: center;
+	  text-decoration: none;
+	  display: inline-block;
+	  font-size: 16px;" 
+  onclick="save()"> حفظ </button>
 
  <br><br><br><br>
 </div>
@@ -131,7 +141,10 @@
 <script src="{{ url('js/jquery-1.8.3.min.js') }}"></script>
 <script src="{{ url('js/tagfeet.js') }}" ></script>
 <script type="text/javascript">
-
+function save(){
+	num = document.getElementById('num').innerHTML.replace(/\D/g,'');;
+	console.log(num);
+}
 
 function PrintElem(elem)
 {

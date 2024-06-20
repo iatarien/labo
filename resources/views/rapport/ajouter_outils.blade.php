@@ -442,14 +442,20 @@ function avis_changed(val,type,state){
     }else{
         devices = document.getElementById('matiere').value;
     }
-    
+
     device = devices.split('1989raouf1989')[0];
     if(val =="بتحفظ"){
-        add_reserve(rapport,device,state);
+        if(state =="avis"){
+            link = "reserve_before";
+        }
+        if(state =="after"){
+            link = "reserve_after";
+        }
+        add_reserve(link,rapport,device,state);
     }
 }
-function add_reserve(rapport,outil,state){
-  var myWindow = popupwindow("/add_reserve/"+rapport+"/"+outil+"/"+state, " التحفظ", "3080","2720");
+function add_reserve(link,rapport,outil,state){
+  var myWindow = popupwindow("/"+link+"/"+rapport+"/"+outil+"/"+state, " التحفظ", "3080","2720");
 }
 function popupwindow(url, title, w, h) {
   var left = (screen.width/2)-(w/2);
