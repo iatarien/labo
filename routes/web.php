@@ -36,8 +36,10 @@ Route::post('/chnage_profile_photo','UsersController@chnage_profile_photo');
 
 /** RESERVES ROUTES */
 Route::get('/add_reserve/{rapport}/{outil}/{state}', 'ReserveController@add_reserve');
+Route::get('/reserve/{id_reserve}', 'ReserveController@reserve');
 
 Route::post('/insert_reserve', 'ReserveController@insert_reserve');
+Route::post('/update_reserve', 'ReserveController@update_reserve');
 
 Route::get('/reserve_before/{rapport}/{outil}/{state}', 'ReserveController@reserve_before');
 Route::get('/reserve_after/{id?}', 'ReserveController@reserve_after');

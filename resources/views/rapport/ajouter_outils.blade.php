@@ -455,7 +455,13 @@ function avis_changed(val,type,state){
     }
 }
 function add_reserve(link,rapport,outil,state){
-  var myWindow = popupwindow("/"+link+"/"+rapport+"/"+outil+"/"+state, " التحفظ", "3080","2720");
+    var myWindow = popupwindow("/"+link+"/"+rapport+"/"+outil+"/"+state, " التحفظ", "3080","2720");
+    var loop = setInterval(function() {   
+        if(myWindow.closed) {  
+            clearInterval(loop);  
+        }
+    }, 1000); 
+ 
 }
 function popupwindow(url, title, w, h) {
   var left = (screen.width/2)-(w/2);

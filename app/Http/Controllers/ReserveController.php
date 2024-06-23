@@ -28,7 +28,16 @@ class ReserveController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-     
+    
+     public function reserve($id_reserve)
+    {   
+        $user = Auth::user();
+        $reserve = DB::table('reserves')->where('id_reserve',$id_reserve)->first();
+
+        return view('attestations.fiche',['user'=> $user,"reserve"=>$reserve,
+        "id_reserve"=>$id_reserve]);
+
+    }
     public function add_reserve($rapport="",$outil="",$state="")
     {   
         $user = Auth::user();
@@ -47,11 +56,11 @@ class ReserveController extends Controller
         ->join('teachers',"teachers.id_teacher","=","activity.teacher")
         ->where('id_activity',$rapport->activite)->first();
         $year = explode("-",$rapport->date)[0];
-        $last_num = DB::select(DB::raw("SELECT MAX(id_reserve) as max FROM reserves
+        $last_num = DB::select(DB::raw("SELECT MAX(num_reserve) as max FROM reserves
         WHERE year = ".$year))[0]->max;
         $num = $last_num +1;
         return view('attestations.reserve_before',['user'=> $user,"rapport"=>$rapport,
-        "activity"=>$activity,"outil"=>$outil,"num"=>$num,"year"=>$year]);
+        "activity"=>$activity,"outil"=>$outil,"num"=>$num,"year"=>$year,"state"=>$state]);
     }
     public function reserve_after($id="")
     {   
@@ -89,12 +98,29 @@ class ReserveController extends Controller
         $rapport = $request["rapport"];
         $outil = $request["outil"];
         $state = $request["state"];
+        $html = $request["html"];
+        $year = $request["year"];
+        $num = $request["num"];
         
         $id = DB::table('reserves')->
-        insertGetId(["rapport"=>$rapport,
-        "outil"=>$outil,"state"=>$state,"user"=>$user->id]);
+        insertGetId(["rapport"=>$rapport,"num_reserve"=>$num,"html"=>$html,
+        "outil"=>$outil,"state"=>$state,"user"=>$user->id,"year"=>$year]);
+        
+        return "success";
 
-        return Redirect::to('/close');
+    }
+    public function update_reserve(Request $request)
+    {   
+        $user = Auth::user();
+        $html = $request["html"];
+        $num = $request["num"];
+        $id_reserve = $request["id_reserve"];
+
+        DB::table('reserves')->where('id_reserve',$id_reserve)->
+        update(["num_reserve"=>$num,"html"=>$html]);
+        
+        return "success";
+
     }
     public function close(){
         return view('close');

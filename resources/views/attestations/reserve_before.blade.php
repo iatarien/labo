@@ -120,19 +120,11 @@
 	  text-decoration: none;
 	  display: inline-block;
 	  font-size: 16px;" 
-  onclick=location.href="/reserves/"> رجوع </button>
+  onclick="window.close()"> رجوع </button>
+<span id="btn_div">
 
-  <button id="bouton" style="
-	  background-color: lightblue; /* Green */
-	  border: none;
-	  color: black;
-	  cursor: pointer;
-	  padding: 15px 32px;
-	  text-align: center;
-	  text-decoration: none;
-	  display: inline-block;
-	  font-size: 16px;" 
-  onclick="save()"> حفظ </button>
+</span>
+
 
  <br><br><br><br>
 </div>
@@ -141,9 +133,85 @@
 <script src="{{ url('js/jquery-1.8.3.min.js') }}"></script>
 <script src="{{ url('js/tagfeet.js') }}" ></script>
 <script type="text/javascript">
+window.onload = function(){
+	str = '<button id="bouton_save" style="'+
+	  'background-color: lightblue; /* Green */'+
+	  'border: none;'+
+	  'color: black;'+
+	  'cursor: pointer;'+
+	  'padding: 15px 32px;'+
+	  'text-align: center;'+
+	  'text-decoration: none;'+
+	  'display: inline-block;'+
+	  'font-size: 16px;"';
+	if(document.getElementById('id_reserve')){
+  	  	str+= 'onclick="update_reserve()"> حفظ </button>';
+	}else{
+  	  	str+= 'onclick="save()"> حفظ </button>';
+	}
+	if(document.getElementById('not_user')){
+		document.getElementsByTagName('body')[0].contentEditable  = "false";
+	}
+
+	btn = document.getElementById('btn_div').innerHTML = str;
+
+};
+function update_reserve(){
+
+	id_reserve = document.getElementById('id_reserve').value;
+
+	num = document.getElementById('num').innerHTML.replace(/\D/g,'');
+	url = "/update_reserve";
+	const html = document.getElementsByTagName('html')[0].innerHTML;
+	$.ajax({
+	    url: url,
+	    type:"POST", 
+	    cache: false,
+		data : {
+			"html":html,
+			"num" : num,
+			"id_reserve":id_reserve,
+			"_token" : "{{ csrf_token() }}"},
+		success:function(response) {
+			console.log(response);
+		},
+		error:function(response) {
+			console.log(response);
+		},
+	});
+}
+
 function save(){
-	num = document.getElementById('num').innerHTML.replace(/\D/g,'');;
-	console.log(num);
+	num = document.getElementById('num').innerHTML.replace(/\D/g,'');
+	@if(isset($rapport))
+	rapport = "{{$rapport->id_rapport}}";
+	outil = "{{$outil}}";
+	state = "{{$state}}";
+	year = "{{$year}}";
+	@endif
+
+	const html = document.getElementsByTagName('html')[0].innerHTML;
+	url = "/insert_reserve/";
+	$.ajax({
+	    url: url,
+	    type:"POST", 
+	    cache: false,
+		data : {
+			"html":html,
+			"rapport":rapport,
+			"outil":outil,
+			"state":state,
+			"year":year,
+			"num":num,
+			"_token" : "{{ csrf_token() }}"},
+		success:function(response) {
+			console.log(response);
+			window.close();
+		},
+		error:function(response) {
+			console.log(response);
+		},
+	});
 }
 
 function PrintElem(elem)
@@ -163,6 +231,7 @@ function PrintElem(elem)
 }
 function printdiv(printdivname) {
 	document.getElementById('bouton').style.display = "none";
+	document.getElementById('bouton_save').style.display = "none";
 	document.getElementById('bouton_2').style.display = "none";
    /* var footstr = "</body>";
     var newstr = document.getElementById(printdivname).innerHTML;
@@ -173,6 +242,7 @@ function printdiv(printdivname) {
     print();
     document.getElementById('bouton').style.display = "inline-block";
 	document.getElementById('bouton_2').style.display = "inline-block";
+	document.getElementById('bouton_save').style.display = "inline-block";
 	
     return false;
 }

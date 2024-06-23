@@ -106,10 +106,11 @@ class RapportController extends Controller
         $type_activity = $request['activite'];
         $niveau = $request['niveau'];
         $module = $request['module'];
+        $teacher = $request['teacher'];
         $sujet_trav = $request['sujet_trav'];
 
         $id = DB::table('activity')->
-        insertGetId(["type_activity"=>$type_activity,
+        insertGetId(["type_activity"=>$type_activity,"teacher"=>$teacher,
         "niveau"=>$niveau,"module"=>$module,"sujet_trav"=>$sujet_trav]);
         DB::table('rapport')->where("id_rapport",$id_rapport)->update(["activite"=>$id]);
 
