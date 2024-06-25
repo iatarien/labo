@@ -36,7 +36,7 @@
                         <div class="card-body">
                             <div class="table-responsive" >
                                 <table class="table table-bordered" id="dataTable" cellspacing="0" 
-                                style="width : 1200px; text-align : center; color : black; font-size : 14px;">
+                                style="width : 1250px; text-align : center; color : black; font-size : 14px;">
                                     <thead style="background-color : lightblue;">
                                         <tr>
                                             <th style="width : 120px">التاريخ و الوقت</th>
@@ -77,8 +77,19 @@
                                             <td>{{$outil->name_tool}}<br><span style="color: blue">{{$outil->inventaire}}</span></td>
                                             <td>{{$outil->charge}}</td>
                                             <td>{{$outil->state_av}}</td>
+                                            @if($outil->avis =="بتحفظ")
+                                            <td>{{$outil->avis}} <br> <a href="reserve/{{$outil->reserve_before}}" target="_blank"> 
+                                                <i style="font-size : 20px;" class="fas fa-fw fa-file-word"></i></a></td>
+                                            @else
                                             <td>{{$outil->avis}}</td>
+                                            @endif
+                                            @if($outil->state_after =="بتحفظ")
+                                            <td>{{$outil->state_after}} <br> <a href="reserve/{{$outil->reserve_after}}" target="_blank"> 
+                                                <i style="font-size : 20px;" class="fas fa-fw fa-file-word"></i></a></td>
+                                            @else
                                             <td>{{$outil->state_after}}</td>
+                                            @endif
+                                            
                                             @else
                                             <td>/</td>
                                             <td>/</td>
@@ -109,11 +120,21 @@
                                             @foreach($outils as $outil)
                                             <?php $outil = (object) $outil; ?>
                                             <tr>
-                                            <td>{{$outil->name_tool}}<br><span style="color: blue">{{$outil->inventaire}}</span></td>
+                                                <td>{{$outil->name_tool}}<br><span style="color: blue">{{$outil->inventaire}}</span></td>
                                                 <td>{{$outil->charge}}</td>
                                                 <td>{{$outil->state_av}}</td>
+                                                @if($outil->avis =="بتحفظ")
+                                                <td>{{$outil->avis}} <br> <a href="reserve/{{$outil->reserve_before}}" target="_blank"> 
+                                                    <i style="font-size : 20px;" class="fas fa-fw fa-file-word"></i></a></td>
+                                                @else
                                                 <td>{{$outil->avis}}</td>
+                                                @endif
+                                                @if($outil->state_after =="بتحفظ")
+                                                <td>{{$outil->state_after}} <br> <a href="reserve/{{$outil->reserve_after}}" target="_blank"> 
+                                                    <i style="font-size : 20px;" class="fas fa-fw fa-file-word"></i></a></td>
+                                                @else
                                                 <td>{{$outil->state_after}}</td>
+                                                @endif
                                             </tr>
                                             @endforeach
                                             

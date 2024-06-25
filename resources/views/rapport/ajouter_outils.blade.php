@@ -392,6 +392,8 @@ function submit_form(){
     show = document.getElementById('show_chemicals').value;
     if(show =="show"){
         insert_outils("chemicals","/insert_chemicals","redirect");
+    }else{
+        window.location.href = "/rapports";
     }
 
 }
@@ -461,7 +463,6 @@ function add_reserve(link,rapport,outil,state){
             clearInterval(loop);  
         }
     }, 1000); 
- 
 }
 function popupwindow(url, title, w, h) {
   var left = (screen.width/2)-(w/2);
