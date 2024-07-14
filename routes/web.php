@@ -42,7 +42,7 @@ Route::post('/insert_reserve', 'ReserveController@insert_reserve');
 Route::post('/update_reserve', 'ReserveController@update_reserve');
 
 Route::get('/reserve_before/{rapport}/{outil}/{state}', 'ReserveController@reserve_before');
-Route::get('/reserve_after/{id?}', 'ReserveController@reserve_after');
+Route::get('/reserve_after/{rapport}/{outil}/{state}', 'ReserveController@reserve_after');
 Route::get('/demande_access/{id?}', 'ReserveController@demande_access');
 Route::get('/engagement/{id?}', 'ReserveController@engagement');
 Route::get('/visite/{id?}', 'ReserveController@visite');

@@ -38,13 +38,13 @@
                                     <label class="control-label col-lg-2 text-right" for="title"> نوع النشاط</label>
                                     <div class="col-lg-8">
                                     <select class="form-control" name="activite" onchange="changed_activity(this.value)">
-                                        <option> عمل تطبيقي</option>
-                                        <option> أعمال نهاية الدراسة</option>
-                                        <option> زيارات</option>    
+                                        <option>عمل تطبيقي</option>
+                                        <option>أعمال نهاية الدراسة</option>
+                                        <option>زيارات</option>    
                                     </select>
                                     </div>
                                 </div>
-                                <div class="form-group row">
+                                <div class="form-group row" id="niveau">
                                     <label class="control-label col-lg-2 text-right" for="title">  المستوى</label>
                                     <div class="col-lg-8">
                                     <select name="niveau" class="form-control" >
@@ -54,7 +54,7 @@
                                     </select>
                                     </div>
                                 </div>
-                                <div class="form-group row">
+                                <div class="form-group row" id="module">
                                     <label class="control-label col-lg-2 text-right" for="title">  المقياس</label>
                                     <div class="col-lg-8">
                                     <select name="module" class="form-control" >
@@ -64,7 +64,7 @@
                                     </select>
                                     </div>
                                 </div>
-                                <div class="form-group row">
+                                <div class="form-group row" id="teacher">
                                     <label class="control-label col-lg-2 text-right" for="title">  الأستاذ</label>
                                     <div class="col-lg-8">
                                     <select name="teacher" class="form-control" >
@@ -74,13 +74,22 @@
                                     </select>
                                     </div>
                                 </div>
-                                <div class="form-group row">
+                                <div class="form-group row" id="sujet">
                                     <label class="control-label col-lg-2 text-right" for="title">  موضوع العمل</label>
                                     <div class="col-lg-8">
                                     <textarea required  name="sujet_trav" class="form-control" ></textarea>
                                     </div>
                                 </div>
-
+                                <div class="form-group row" id="teacher">
+                                    <label class="control-label col-lg-2 text-right" for="title">  الأستاذ</label>
+                                    <div class="col-lg-8">
+                                    <select name="teacher" class="form-control" >
+                                        @foreach($teachers as $teacher)
+                                            <option value="{{$teacher->id_teacher}}"> {{$teacher->name_teacher}}</option>
+                                        @endforeach 
+                                    </select>
+                                    </div>
+                                </div>
                                 <div class="form-group" align="center">
                                 <button class="btn btn-primary" type="submit">التالي</button>
                                 </div>
@@ -97,11 +106,22 @@
             @include('components.footer')
 <script type="text/javascript">
 function changed_activity(val){
-    if(val =="all"){
-        document.getElementById('some').style.display ='none';
-    }else{
-        document.getElementById('some').style.display ='flex';
-    } 
+    if(val =="أعمال نهاية الدراسة"){
+        document.getElementById('niveau').style.display ='none';
+        document.getElementById('module').style.display ='none';
+        document.getElementById('teacher').style.display ='none';
+        document.getElementById('sujet').style.display ='none';
+    }else if(val =="عمل تطبيقي") {
+        document.getElementById('niveau').style.display ='flex';
+        document.getElementById('module').style.display ='flex';
+        document.getElementById('teacher').style.display ='flex';
+        document.getElementById('sujet').style.display ='flex';
+    }else if(val =="زيارات") {
+        document.getElementById('niveau').style.display ='none';
+        document.getElementById('module').style.display ='none';
+        document.getElementById('teacher').style.display ='none';
+        document.getElementById('sujet').style.display ='none';
+    }  
 }
 window.onload = function(){
 	document.getElementById('loading').style.display = "none";

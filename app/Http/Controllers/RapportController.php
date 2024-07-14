@@ -51,6 +51,18 @@ class RapportController extends Controller
             $rapport->chemicals = $chemicals;
             $rapport->n = $n;
             $rapport->m = $m;
+            foreach($rapport->outils as $outil){
+                if($outil->avis =="بتحفظ"){
+                    $reserve = DB::table('reserves')->where('rapport',$rapport->id_rapport)->
+                    where('outil',$outil->id_outil)->where('state',"avis")->first();
+                    $outil->reserve_before = $reserve->id_reserve;
+                }
+                if($outil->state_after =="بتحفظ"){
+                    $reserve = DB::table('reserves')->where('rapport',$rapport->id_rapport)->
+                    where('outil',$outil->id_outil)->where('state',"after")->first();
+                    $outil->reserve_after = $reserve->id_reserve;
+                }
+            }
         }
         return view('rapport.rapports',['user' => $user,"rapports"=>$rapports]);
         

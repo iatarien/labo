@@ -31,7 +31,7 @@
 </style>
 
 </head>
-<body contenteditable="false">
+<body contenteditable="true">
 <section  style="background-color: white; text-align: center; font-size: 13.5px; margin: 45px;" id="fiche">
 	<div id="fiche_top">
         <div style="  display: inline-block; width : 100%">
@@ -56,10 +56,10 @@
             : تامنغست في  
 			<h3>
 		</div>
-		<?php $v ="......."; ?>
-		<div style="  display: inline-block; float: right; width : 45%;">
+		<?php $v = "0".$num; ?>
+		<div style="  display: inline-block; float: right; width : 45%;" contenteditable="false">
             <h3 style="text-align : right;">
-            رقم القيــــد: {{$v}} ك ع ت / م ك ب ج/ {{Date('Y')}} 
+            رقم القيــــد: <span id="num" contenteditable="true">{{$v}}</span> ك ع ت / م ك ب ج/ {{$year}} 
 			</h3>
 		</div>
         <br><br><br><br>
@@ -69,12 +69,12 @@
             </h1>
             <br>
             <p style="font-size : 5mm; text-align : justify;"> 
-			يؤسفنا أن نعلمكم نبلغكم انه وبتاريخ ........................ 
+			يؤسفنا أن نعلمكم نبلغكم انه وبتاريخ {{$rapport->date}}  
             بعد الحصة التطبيقية الخاصة بـــــ: <br>
-            المقياس: .......................................<br>
-            الأستاذ: .......................................<br>
-            المستوى: .....................................<br>
-            الفترة الزمنية للنشاط التطبيقي: ................................... <br>
+            المقياس: {{$activity->name_module}} <br>
+            الأستاذ: {{$activity->name_teacher}} <br>
+            المستوى: {{$activity->name_niveau}} <br>
+            الفترة الزمنية للنشاط التطبيقي: {{$rapport->time}} <br>
             تم استلام الحاجيات الخاصة بالتحفظات التالية:<br>
 
 			1 - .......................... <br>
@@ -97,7 +97,11 @@
 		<div style="  display: inline-block; float: right; width : 45%;">
             <p style="text-align : right; font-size : 5mm;">
 			: المهندس المتابع للعمل التطبيقي <br>
-            ....................  
+			@if($rapport->engineer =="all")
+			جميع المهندسين
+			@else
+			{{$rapport->full_name}}
+			@endif
 			</p>
 		</div>
 	</div>
@@ -127,8 +131,11 @@
 	  text-decoration: none;
 	  display: inline-block;
 	  font-size: 16px;" 
-  onclick=location.href="/reserves/"> رجوع </button>
+  onclick="window.close()"> رجوع </button>
 
+<span id="btn_div">
+
+</span>
 
  <br><br><br><br>
 </div>
@@ -137,7 +144,86 @@
 <script src="{{ url('js/jquery-1.8.3.min.js') }}"></script>
 <script src="{{ url('js/tagfeet.js') }}" ></script>
 <script type="text/javascript">
+window.onload = function(){
+	str = '<button id="bouton_save" style="'+
+	  'background-color: lightblue; /* Green */'+
+	  'border: none;'+
+	  'color: black;'+
+	  'cursor: pointer;'+
+	  'padding: 15px 32px;'+
+	  'text-align: center;'+
+	  'text-decoration: none;'+
+	  'display: inline-block;'+
+	  'font-size: 16px;"';
+	if(document.getElementById('id_reserve')){
+  	  	str+= 'onclick="update_reserve()"> حفظ </button>';
+	}else{
+  	  	str+= 'onclick="save()"> حفظ </button>';
+	}
+	if(document.getElementById('not_user')){
+		document.getElementsByTagName('body')[0].contentEditable  = "false";
+	}
 
+	btn = document.getElementById('btn_div').innerHTML = str;
+
+};
+function update_reserve(){
+
+	id_reserve = document.getElementById('id_reserve').value;
+
+	num = document.getElementById('num').innerHTML.replace(/\D/g,'');
+	url = "/update_reserve";
+	const html = document.getElementsByTagName('html')[0].innerHTML;
+	$.ajax({
+	    url: url,
+	    type:"POST", 
+	    cache: false,
+		data : {
+			"html":html,
+			"num" : num,
+			"id_reserve":id_reserve,
+			"_token" : "{{ csrf_token() }}"},
+		success:function(response) {
+			console.log(response);
+		},
+		error:function(response) {
+			console.log(response);
+		},
+	});
+}
+
+function save(){
+	num = document.getElementById('num').innerHTML.replace(/\D/g,'');
+	@if(isset($rapport))
+	rapport = "{{$rapport->id_rapport}}";
+	outil = "{{$outil}}";
+	state = "{{$state}}";
+	year = "{{$year}}";
+	@endif
+
+	const html = document.getElementsByTagName('html')[0].innerHTML;
+	url = "/insert_reserve/";
+	$.ajax({
+	    url: url,
+	    type:"POST", 
+	    cache: false,
+		data : {
+			"html":html,
+			"rapport":rapport,
+			"outil":outil,
+			"state":state,
+			"year":year,
+			"num":num,
+			"_token" : "{{ csrf_token() }}"},
+		success:function(response) {
+			console.log(response);
+			window.close();
+		},
+		error:function(response) {
+			console.log(response);
+		},
+	});
+}
 
 function PrintElem(elem)
 {
@@ -156,6 +242,7 @@ function PrintElem(elem)
 }
 function printdiv(printdivname) {
 	document.getElementById('bouton').style.display = "none";
+	document.getElementById('bouton_save').style.display = "none";
 	document.getElementById('bouton_2').style.display = "none";
    /* var footstr = "</body>";
     var newstr = document.getElementById(printdivname).innerHTML;
@@ -166,6 +253,7 @@ function printdiv(printdivname) {
     print();
     document.getElementById('bouton').style.display = "inline-block";
 	document.getElementById('bouton_2').style.display = "inline-block";
+	document.getElementById('bouton_save').style.display = "inline-block";
 	
     return false;
 }

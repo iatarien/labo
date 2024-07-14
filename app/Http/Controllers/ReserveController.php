@@ -50,7 +50,9 @@ class ReserveController extends Controller
     {   
        
         $user = Auth::user();
-        $rapport = DB::table('rapport')->where('id_rapport',$rapport_id)->first();
+        $rapport = DB::table('rapport')->
+        leftjoin("users","rapport.engineer","users.id")->
+        where('id_rapport',$rapport_id)->first();
         $activity = Db::table('activity')->join("niveau","activity.niveau","=","niveau.id_niveau")
         ->join('module',"module.id_module","=","activity.module")
         ->join('teachers',"teachers.id_teacher","=","activity.teacher")
@@ -62,10 +64,20 @@ class ReserveController extends Controller
         return view('attestations.reserve_before',['user'=> $user,"rapport"=>$rapport,
         "activity"=>$activity,"outil"=>$outil,"num"=>$num,"year"=>$year,"state"=>$state]);
     }
-    public function reserve_after($id="")
+    public function reserve_after($rapport_id,$outil,$state)
     {   
         $user = Auth::user();
-        return view('attestations.reserve_after',['user'=> $user]);
+        $rapport = DB::table('rapport')->where('id_rapport',$rapport_id)->first();
+        $activity = Db::table('activity')->join("niveau","activity.niveau","=","niveau.id_niveau")
+        ->join('module',"module.id_module","=","activity.module")
+        ->join('teachers',"teachers.id_teacher","=","activity.teacher")
+        ->where('id_activity',$rapport->activite)->first();
+        $year = explode("-",$rapport->date)[0];
+        $last_num = DB::select(DB::raw("SELECT MAX(num_reserve) as max FROM reserves
+        WHERE year = ".$year))[0]->max;
+        $num = $last_num +1;
+        return view('attestations.reserve_after',['user'=> $user,"rapport"=>$rapport,
+        "activity"=>$activity,"outil"=>$outil,"num"=>$num,"year"=>$year,"state"=>$state]);
     }
     public function demande_access($id="")
     {   
