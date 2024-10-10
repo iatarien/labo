@@ -38,7 +38,7 @@ class RapportController extends Controller
         join("niveau","activity.niveau","=","niveau.id_niveau")->
         join("module","module.id_module","activity.module")->
         join("labos","labos.id_labo","rapport.labo")->
-        orderBy("date","ASC")->orderBy("time","ASC")->get();
+        orderBy("date","DESC")->orderBy("time","ASC")->get();
         foreach($rapports as $rapport){
             $outils = DB::table("outils")->join("tools","tools.id_tool","=","outils.id_outil")->where("outils.id_rapport",$rapport->id_rapport)->get();
             $chemicals = DB::table("chemicals")->join("chemical","chemicals.id_chemical","=","chemical.id_chemical")->where("chemicals.id_rapport",$rapport->id_rapport)->get();
@@ -93,7 +93,8 @@ class RapportController extends Controller
         $rapport = DB::table('rapport')->where('id_rapport',$id)->first();
         $devices = DB::table('tools')->where("type","جهاز")->get();
         $matieres = DB::table('tools')->where("type","مادة")->get();
-        $chemicals = DB::table('chemical')->get();
+        $chemicals = DB::table('chemical')->where("expiration",">=",Date('Y-m-d'))->
+        orWhereNULL("expiration")->get();
         return view('rapport.ajouter_outils',['user' => $user,"rapport"=>$rapport,
         "devices"=>$devices,"matieres"=>$matieres,"chemicals"=>$chemicals]);
         
@@ -138,6 +139,7 @@ class RapportController extends Controller
                 $id = DB::table('outils')->
                 insertGetId(["id_rapport"=>$device[6],"id_outil"=>$device[0],"type_outil"=>$device[1],
                 "charge"=>$device[2],"state_av"=>$device[3],"avis"=>$device[4],"state_after"=>$device[5]]);
+                DB::table('tools')->where('id_tool',$device[0])->update(['state'=>$device[3]]);
             }
         }
         

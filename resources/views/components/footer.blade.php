@@ -25,7 +25,7 @@
         <i class="fas fa-angle-up"></i>
     </a>
 
-
+    <script src="/assets/js/sweetalert2.min.js"></script>
 
     <!-- Bootstrap core JavaScript-->
     <script src="/vendor/jquery/jquery.min.js"></script>
@@ -41,6 +41,18 @@
     window.onload = function(){
         document.getElementById('loading').style.display = "none";
     };
+    function supprimer(url){
+    Swal.fire({
+    title: " هل أنت متأكد من الحذف ؟",
+    showDenyButton: true,
+    confirmButtonText: "إلغاء",
+    denyButtonText: `حذف`
+    }).then((result) => {
+        if (result.isDenied) {
+            document.location.href = url;
+        } 
+    });
+}
     </script>
 
 </body>

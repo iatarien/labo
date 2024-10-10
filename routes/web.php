@@ -49,6 +49,70 @@ Route::get('/visite/{id?}', 'ReserveController@visite');
 Route::get('/prise/{id?}', 'ReserveController@prise');
 Route::get('/after_prise/{id?}', 'ReserveController@after_prise');
 
+
+
+/** TOOLS ROUTES **/
+
+Route::get('/tools/{type}', 'ToolsController@tools');
+Route::get('/edit_tool/{id}/{type}', 'ToolsController@edit_tool');
+Route::get('/add_tool/{type}', 'ToolsController@add_tool');
+Route::get('/delete_tool/{id}/{type}', 'ToolsController@delete_tool');
+
+Route::post('/insert_tool', 'ToolsController@insert_tool');
+Route::post('/update_tool', 'ToolsController@update_tool');
+
+/** CHEMICALS ROUTES **/
+
+Route::get('/chemicals/', 'ToolsController@chemicals');
+Route::get('/edit_chemical/{id}', 'ToolsController@edit_chemical');
+Route::get('/add_chemical/', 'ToolsController@add_chemical');
+Route::get('/delete_chemical/{id}', 'ToolsController@delete_chemical');
+
+Route::post('/insert_chemical', 'ToolsController@insert_chemical');
+Route::post('/update_chemical', 'ToolsController@update_chemical');
+
+/** LABOS ROUTES **/
+
+Route::get('/labos/', 'ModuleController@labos');
+Route::get('/edit_labo/{id}', 'ModuleController@edit_labo');
+Route::get('/add_labo/', 'ModuleController@add_labo');
+Route::get('/delete_labo/{id}', 'ModuleController@delete_labo');
+
+Route::post('/insert_labo', 'ModuleController@insert_labo');
+Route::post('/update_labo', 'ModuleController@update_labo');
+
+
+/** NIVEAUX ROUTES **/
+
+Route::get('/niveaux/', 'ModuleController@niveaux');
+Route::get('/edit_niveau/{id}', 'ModuleController@edit_niveau');
+Route::get('/add_niveau/', 'ModuleController@add_niveau');
+Route::get('/delete_niveau/{id}', 'ModuleController@delete_niveau');
+
+Route::post('/insert_niveau', 'ModuleController@insert_niveau');
+Route::post('/update_niveau', 'ModuleController@update_niveau');
+
+/** MODULES ROUTES **/
+
+Route::get('/modules/', 'ModuleController@modules');
+Route::get('/edit_module/{id}', 'ModuleController@edit_module');
+Route::get('/add_module/', 'ModuleController@add_module');
+Route::get('/delete_module/{id}', 'ModuleController@delete_module');
+
+Route::post('/insert_module', 'ModuleController@insert_module');
+Route::post('/update_module', 'ModuleController@update_module');
+
+
+/** TEACHERS ROUTES **/
+
+Route::get('/teachers/', 'TeachersController@teachers');
+Route::get('/edit_teacher/{id}', 'TeachersController@edit_teacher');
+Route::get('/add_teacher/', 'TeachersController@add_teacher');
+Route::get('/delete_teacher/{id}', 'TeachersController@delete_teacher');
+
+Route::post('/insert_teacher', 'TeachersController@insert_teacher');
+Route::post('/update_teacher', 'TeachersController@update_teacher');
+
 /** AUTH ROUTES **/
 Auth::routes();
 Route::post('/login', 'Auth\LoginController@login');

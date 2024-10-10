@@ -122,7 +122,7 @@
   onclick="printdiv('fiche')"> طباعة </button>
 
 <button id="bouton_2" style="
-	  background-color: skyblue; /* Green */
+	  background-color: lightgreen; /* Green */
 	  border: none;
 	  color: black;
 	  cursor: pointer;

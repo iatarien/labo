@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Jun 25, 2024 at 02:47 PM
+-- Generation Time: Oct 10, 2024 at 03:25 PM
 -- Server version: 5.7.31
 -- PHP Version: 7.4.9
 
@@ -36,7 +36,7 @@ CREATE TABLE IF NOT EXISTS `activity` (
   `teacher` int(11) NOT NULL,
   `sujet_trav` text,
   PRIMARY KEY (`id_activity`)
-) ENGINE=MyISAM AUTO_INCREMENT=27 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=32 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `activity`
@@ -65,7 +65,12 @@ INSERT INTO `activity` (`id_activity`, `type_activity`, `niveau`, `module`, `tea
 (23, 'عمل تطبيقي', 2, 2, 2, 'TP Algebre'),
 (24, 'عمل تطبيقي', 2, 1, 2, 'TP Analyse'),
 (25, 'عمل تطبيقي', 2, 2, 1, 'lol'),
-(26, 'عمل تطبيقي', 1, 1, 1, 'lalala');
+(26, 'عمل تطبيقي', 1, 1, 1, 'lalala'),
+(27, 'عمل تطبيقي', 1, 1, 1, 'lol'),
+(28, 'عمل تطبيقي', 1, 1, 1, 'aaaa'),
+(29, 'عمل تطبيقي', 1, 1, 1, 'TP'),
+(30, 'عمل تطبيقي', 1, 1, 1, 'ض'),
+(31, 'عمل تطبيقي', 1, 1, 1, 'mm');
 
 -- --------------------------------------------------------
 
@@ -99,14 +104,14 @@ CREATE TABLE IF NOT EXISTS `chemical` (
   `unity` varchar(50) NOT NULL,
   `expiration` date DEFAULT NULL,
   PRIMARY KEY (`id_chemical`)
-) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `chemical`
 --
 
 INSERT INTO `chemical` (`id_chemical`, `name_chemical`, `quantity`, `unity`, `expiration`) VALUES
-(3, 'H20', 870, 'ml', NULL),
+(3, 'H20', 870, 'ml', '2025-10-09'),
 (4, 'CO2', 0, 'm3', NULL);
 
 -- --------------------------------------------------------
@@ -138,6 +143,33 @@ INSERT INTO `chemicals` (`id_chemicals`, `id_rapport`, `id_chemical`, `qty`, `qu
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `company`
+--
+
+DROP TABLE IF EXISTS `company`;
+CREATE TABLE IF NOT EXISTS `company` (
+  `id_comp` int(1) NOT NULL AUTO_INCREMENT,
+  `ville` varchar(50) NOT NULL,
+  `ville_fr` varchar(50) NOT NULL,
+  `ministere` varchar(50) NOT NULL,
+  `ministere_fr` varchar(100) NOT NULL,
+  `direction` varchar(50) NOT NULL,
+  `direction_fr` varchar(100) NOT NULL,
+  `year` varchar(50) NOT NULL,
+  `license` date DEFAULT NULL,
+  PRIMARY KEY (`id_comp`)
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `company`
+--
+
+INSERT INTO `company` (`id_comp`, `ville`, `ville_fr`, `ministere`, `ministere_fr`, `direction`, `direction_fr`, `year`, `license`) VALUES
+(1, 'ميلة', 'Mila', 'الأشغال العمومية و المنشآت القاعدية', 'Ministère des Travaux Publics et des Infrastructures de Base', 'الأشغال العمومية', 'Direction des Travaux Publics', '2024', '2025-10-31');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `labos`
 --
 
@@ -146,7 +178,7 @@ CREATE TABLE IF NOT EXISTS `labos` (
   `id_labo` int(11) NOT NULL AUTO_INCREMENT,
   `name_labo` text NOT NULL,
   PRIMARY KEY (`id_labo`)
-) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `labos`
@@ -167,7 +199,7 @@ CREATE TABLE IF NOT EXISTS `module` (
   `id_module` int(11) NOT NULL AUTO_INCREMENT,
   `name_module` text NOT NULL,
   PRIMARY KEY (`id_module`)
-) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `module`
@@ -188,7 +220,7 @@ CREATE TABLE IF NOT EXISTS `niveau` (
   `id_niveau` int(11) NOT NULL AUTO_INCREMENT,
   `name_niveau` text NOT NULL,
   PRIMARY KEY (`id_niveau`)
-) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `niveau`
@@ -196,7 +228,8 @@ CREATE TABLE IF NOT EXISTS `niveau` (
 
 INSERT INTO `niveau` (`id_niveau`, `name_niveau`) VALUES
 (1, 'L1'),
-(2, 'L2');
+(2, 'L2'),
+(4, 'M1');
 
 -- --------------------------------------------------------
 
@@ -215,7 +248,7 @@ CREATE TABLE IF NOT EXISTS `outils` (
   `avis` varchar(100) NOT NULL,
   `state_after` varchar(100) NOT NULL,
   PRIMARY KEY (`id_outils`)
-) ENGINE=MyISAM AUTO_INCREMENT=27 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=31 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `outils`
@@ -239,7 +272,10 @@ INSERT INTO `outils` (`id_outils`, `id_rapport`, `id_outil`, `type_outil`, `char
 (23, 28, 1, 'جهاز', 'تكفل داخلي', 'في طور الصيانة', 'بدون تحفظ', 'بتحفظ'),
 (24, 28, 2, 'جهاز', 'تكفل داخلي', 'حالة جيدة', 'بتحفظ', 'بدون تحفظ'),
 (25, 29, 1, 'جهاز', 'تكفل داخلي', 'حالة جيدة', 'بتحفظ', 'بدون تحفظ'),
-(26, 29, 2, 'جهاز', 'تكفل داخلي', 'حالة جيدة', 'بدون تحفظ', 'بتحفظ');
+(26, 29, 2, 'جهاز', 'تكفل داخلي', 'حالة جيدة', 'بدون تحفظ', 'بتحفظ'),
+(27, 33, 2, 'جهاز', 'تكفل داخلي', 'حالة جيدة', 'بدون تحفظ', 'بدون تحفظ'),
+(28, 34, 2, 'جهاز', 'تكفل داخلي', 'حالة جيدة', 'بدون تحفظ', 'بدون تحفظ'),
+(29, 35, 2, 'جهاز', 'تكفل داخلي', 'حالة جيدة', 'بدون تحفظ', 'بدون تحفظ');
 
 -- --------------------------------------------------------
 
@@ -257,19 +293,24 @@ CREATE TABLE IF NOT EXISTS `rapport` (
   `ze_activity` varchar(100) NOT NULL,
   `engineer` varchar(10) NOT NULL,
   `user_id` int(11) NOT NULL,
+  `year` varchar(10) DEFAULT NULL,
   PRIMARY KEY (`id_rapport`)
-) ENGINE=MyISAM AUTO_INCREMENT=32 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=38 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `rapport`
 --
 
-INSERT INTO `rapport` (`id_rapport`, `date`, `time`, `labo`, `activite`, `ze_activity`, `engineer`, `user_id`) VALUES
-(12, '2024-04-11', '11:00 - 12:30', 1, 10, 'نشاط بيداغوجي', 'all', 1),
-(16, '2024-04-11', '12:30 - 14:00', 1, 12, 'نشاط بيداغوجي', 'all', 1),
-(29, '2024-06-24', '8:00 - 9:30', 1, 25, 'نشاط بيداغوجي', 'all', 1),
-(30, '2024-06-24', '8:00 - 9:30', 1, 0, 'لا شيئ', 'all', 1),
-(31, '2024-06-24', '8:00 - 9:30', 1, 26, 'نشاط بيداغوجي', 'all', 1);
+INSERT INTO `rapport` (`id_rapport`, `date`, `time`, `labo`, `activite`, `ze_activity`, `engineer`, `user_id`, `year`) VALUES
+(12, '2024-04-11', '11:00 - 12:30', 1, 10, 'نشاط بيداغوجي', 'all', 1, NULL),
+(16, '2024-04-11', '12:30 - 14:00', 1, 12, 'نشاط بيداغوجي', 'all', 1, NULL),
+(29, '2024-06-24', '8:00 - 9:30', 1, 25, 'نشاط بيداغوجي', 'all', 1, NULL),
+(30, '2024-06-24', '8:00 - 9:30', 1, 0, 'لا شيئ', 'all', 1, NULL),
+(31, '2024-06-24', '8:00 - 9:30', 1, 26, 'نشاط بيداغوجي', 'all', 1, NULL),
+(32, '2024-06-26', '8:00 - 9:30', 1, 0, 'نشاط بيداغوجي', 'all', 1, NULL),
+(37, '2024-10-10', '8:00 - 9:30', 1, 31, 'نشاط بيداغوجي', 'all', 2, NULL),
+(36, '2024-10-10', '8:00 - 9:30', 1, 30, 'نشاط بيداغوجي', 'all', 2, NULL),
+(35, '2024-10-09', '8:00 - 9:30', 1, 29, 'نشاط بيداغوجي', 'all', 2, NULL);
 
 -- --------------------------------------------------------
 
@@ -339,7 +380,7 @@ CREATE TABLE IF NOT EXISTS `teachers` (
   `id_teacher` int(11) NOT NULL AUTO_INCREMENT,
   `name_teacher` text NOT NULL,
   PRIMARY KEY (`id_teacher`)
-) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `teachers`
@@ -363,7 +404,7 @@ CREATE TABLE IF NOT EXISTS `tools` (
   `type` varchar(50) NOT NULL,
   `state` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`id_tool`)
-) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `tools`
@@ -371,7 +412,7 @@ CREATE TABLE IF NOT EXISTS `tools` (
 
 INSERT INTO `tools` (`id_tool`, `name_tool`, `inventaire`, `type`, `state`) VALUES
 (1, 'حاسوب', '01/2023', 'جهاز', NULL),
-(2, 'طابعة', '02/2023', 'جهاز', NULL),
+(2, 'طابعة', '02/2023', 'جهاز', 'حالة جيدة'),
 (3, 'أنبوب', '03/2024', 'مادة', NULL),
 (4, 'مسطرة', '016/2024', 'مادة', NULL);
 
@@ -400,7 +441,7 @@ CREATE TABLE IF NOT EXISTS `users` (
 --
 
 INSERT INTO `users` (`id`, `username`, `full_name`, `position`, `service`, `password`, `photo`, `chapitre`) VALUES
-(1, 'admin', 'Ingenieur 0123', 'Admin', 'Ingenieur', '$2y$10$QUvbulG1G1XJbKL9SznJD.Lz.gVdoXaKPWtqVCnSHztVnoW0mcqZ.', 'uploads/users/1_user_avatar.jpg', NULL),
+(1, 'admin', 'Administrateur', 'Admin', 'Admin', '$2y$10$QUvbulG1G1XJbKL9SznJD.Lz.gVdoXaKPWtqVCnSHztVnoW0mcqZ.', 'uploads/users/1_user_avatar.jpg', NULL),
 (2, 'mehdi', 'Mehdi', 'Employé', 'Chef des Labos', '$2y$10$4HZ1pVMOEwe9ilvNpc0Xx.bZY106oa1CdqThqJLodCldccQQZVxAG', 'uploads/users/1_user_avatar.jpg', '622,302-089-002'),
 (50, 'raouf', 'Raouf', 'Employé', 'Ingenieur', '$2y$10$UCmq1DgifkvBCgV91YCm1ODbPWjcsr.KS30H7jDfwbbexG58dSD.W', 'img/user_avatar.jpg', NULL);
 COMMIT;
