@@ -385,10 +385,25 @@ function show_chemicals(val){
     } 
 }
 
+function confirm_rapport(id){
+    $.ajax({
+        url: "/confirm_rapport/"+id,
+        method: "GET", // First change type to method here    },
+        success: function(response) {
+            console.log(response);
+        },
+        error: function(error) {
+            console.log(error);
+        }
+    });
+}
+
 function submit_form(){
     
     insert_outils("devices","/insert_outils","");
     insert_outils("matieres","/insert_outils","");
+    const id_rapport = document.getElementById('id_rapport').value;
+    confirm_rapport(id_rapport);
     show = document.getElementById('show_chemicals').value;
     if(show =="show"){
         insert_outils("chemicals","/insert_chemicals","redirect");

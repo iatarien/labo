@@ -33,11 +33,13 @@ class RapportController extends Controller
     public function show_rapports($filters="")
     {   
         $user = Auth::user();
-        $rapports = DB::table('rapport')->join("activity","activity.id_activity","=","rapport.activite")->
+        $rapports = DB::table('rapport')->
+        join("activity","activity.id_activity","=","rapport.activite")->
         leftjoin("users","rapport.engineer","users.id")->
         join("niveau","activity.niveau","=","niveau.id_niveau")->
         join("module","module.id_module","activity.module")->
         join("labos","labos.id_labo","rapport.labo")->
+        where('rapport.confirmed',"=","confirmed")->
         orderBy("date","DESC")->orderBy("time","ASC")->get();
         foreach($rapports as $rapport){
             $outils = DB::table("outils")->join("tools","tools.id_tool","=","outils.id_outil")->where("outils.id_rapport",$rapport->id_rapport)->get();
@@ -66,6 +68,11 @@ class RapportController extends Controller
         }
         return view('rapport.rapports',['user' => $user,"rapports"=>$rapports]);
         
+    }
+
+    public function confirm_rapport($id){
+        DB::table('rapport')->where('id_rapport',$id)->update(["confirmed"=>"confirmed"]);
+        return "confirmed";
     }
      
     public function add_rapport()

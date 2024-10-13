@@ -20,6 +20,7 @@ Route::get('/rapports/{filters?}', 'RapportController@show_rapports');
 Route::get('/add_rapport', 'RapportController@add_rapport');
 Route::get('/add_rapport_2/{id}', 'RapportController@add_rapport_2');
 Route::get('/add_outils/{id}', 'RapportController@add_outils');
+Route::get('/confirm_rapport/{id}', 'RapportController@confirm_rapport');
 
 Route::post('/insert_rapport', 'RapportController@insert_rapport');
 Route::post('/insert_activity', 'RapportController@insert_activity');
@@ -43,13 +44,15 @@ Route::post('/update_reserve', 'ReserveController@update_reserve');
 
 Route::get('/reserve_before/{rapport}/{outil}/{state}', 'ReserveController@reserve_before');
 Route::get('/reserve_after/{rapport}/{outil}/{state}', 'ReserveController@reserve_after');
-Route::get('/demande_access/{id?}', 'ReserveController@demande_access');
 Route::get('/engagement/{id?}', 'ReserveController@engagement');
 Route::get('/visite/{id?}', 'ReserveController@visite');
 Route::get('/prise/{id?}', 'ReserveController@prise');
 Route::get('/after_prise/{id?}', 'ReserveController@after_prise');
 
 
+/**َ AUTORISATION ROUTES **/
+
+Route::get('/demande_access/{id?}', 'ReserveController@demande_access');
 
 /** TOOLS ROUTES **/
 

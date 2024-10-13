@@ -80,14 +80,21 @@
                                     <textarea required  name="sujet_trav" class="form-control" ></textarea>
                                     </div>
                                 </div>
-                                <div class="form-group row" id="teacher">
-                                    <label class="control-label col-lg-2 text-right" for="title">  الأستاذ</label>
+
+                                <div class="form-group row" id="license" style="display : none;">
+                                    <label class="control-label col-lg-2 text-right" for="title">الترخيص</label>
                                     <div class="col-lg-8">
-                                    <select name="teacher" class="form-control" >
-                                        @foreach($teachers as $teacher)
-                                            <option value="{{$teacher->id_teacher}}"> {{$teacher->name_teacher}}</option>
-                                        @endforeach 
+                                    <select class="form-control" name="activite" onchange="license_changed(this.value)">
+                                        <option>يوجد</option>
+                                        <option>لا يوجد</option> 
                                     </select>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row" id="student" style="display : none;">
+                                    <label class="control-label col-lg-2 text-right" for="title">الطالب</label>
+                                    <div class="col-lg-8">
+                                    <input required  name="student" class="form-control" >
                                     </div>
                                 </div>
                                 <div class="form-group" align="center">
@@ -111,17 +118,41 @@ function changed_activity(val){
         document.getElementById('module').style.display ='none';
         document.getElementById('teacher').style.display ='none';
         document.getElementById('sujet').style.display ='none';
+        document.getElementById('license').style.display ='flex';
+        document.getElementById('student').style.display ='flex';
     }else if(val =="عمل تطبيقي") {
         document.getElementById('niveau').style.display ='flex';
         document.getElementById('module').style.display ='flex';
         document.getElementById('teacher').style.display ='flex';
         document.getElementById('sujet').style.display ='flex';
+        document.getElementById('license').style.display ='none';
+        document.getElementById('student').style.display ='none';
     }else if(val =="زيارات") {
         document.getElementById('niveau').style.display ='none';
         document.getElementById('module').style.display ='none';
         document.getElementById('teacher').style.display ='none';
         document.getElementById('sujet').style.display ='none';
+        document.getElementById('license').style.display ='none';
+        document.getElementById('student').style.display ='none';
     }  
+}
+function license_changed(val){
+    if(val =="يوجد"){
+        document.getElementById('student').style.display ='flex';
+    }else{
+        document.getElementById('student').style.display ='none';
+        link = "demande_access"+"{{$rapport->id_rapport}}";
+        
+        
+    }
+}
+function add_license(link){
+    var myWindow = popupwindow("/"+link, "الترخيص", "3080","2720");
+    var loop = setInterval(function() {   
+        if(myWindow.closed) {  
+            clearInterval(loop);  
+        }
+    }, 1000); 
 }
 window.onload = function(){
 	document.getElementById('loading').style.display = "none";

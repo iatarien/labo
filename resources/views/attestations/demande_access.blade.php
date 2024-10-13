@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="fr">
 <head>
 	  <!-- Bootstrap CSS -->
 	  <link href="{{ url('css/bootstrap.min.css')}}" rel="stylesheet">
@@ -26,12 +26,16 @@
 	    line-height: 1.5;
 	    -webkit-print-color-adjust: exact !important;
 	}
-
+	input[type="date"]::-webkit-inner-spin-button,
+	input[type="date"]::-webkit-calendar-picker-indicator {
+		display: none;
+		-webkit-appearance: none;
+	}
 
 </style>
 
 </head>
-<body contenteditable="false">
+<body contenteditable="true">
 <section  style="background-color: white; text-align: center; font-size: 13.5px; margin: 30px;" id="fiche">
 	<div id="fiche_top">
         <div style="  display: inline-block; width : 100%">
@@ -57,12 +61,12 @@
 			<h3>
 		</div>
 		<?php $v ="......."; ?>
-		<div style="  display: inline-block; float: right; width : 50%;">
+		<div style="  display: inline-block; float: right; width : 45%;" contenteditable="false">
             <h3 style="text-align : right;">
-            رقم القيــــد: {{$v}} ك ع ت / م ك ب ج/ {{Date('Y')}} 
+            رقم القيــــد: <span id="num" contenteditable="true">{{$v}}</span> ك ع ت / م ك ب ج/ {{$year}} 
 			</h3>
 		</div>
-        <br><br>
+        <br><br><br>
 		<div align="center" dir="ltr">
 			<h3 style="margin : 0; width : 60%; text-underline-offset: 10px;"> 
 			Demande d’accès au Laboratoires Universitaire
@@ -79,18 +83,30 @@
 			6- Informer les ingénieurs de laboratoire universitaire avant de quitter le laboratoire.<br>
 			7- Les étudiants ne peuvent en aucun cas ni porter ni garder les clés des laboratoires universitaire.<br>
 			<strong>Informations personnelle d’ l’étudiant</strong>  : <br>
-				<p style="text-align : left;">
-				Nom :………………………. .Prénom :………………… Tél:……………………. Email:………………………….…..<br>
-				Nom :………………………. .Prénom :………………… Tél:……………………. Email:………………………….…..<br>
-				Nom :………………………. .Prénom :………………… Tél:……………………. Email:………………………….…..<br>
+				<p style="text-align : left;" contenteditable="false">
+				Nom : <span id="nom" contenteditable="true" style="display: inline-block; min-width : 100px;"></span>
+				.Prénom : <span id="prenom"  contenteditable="true" style="display: inline-block; min-width : 100px;">
+				</span>
+				Tél: <span id="telephone"  contenteditable="true" style="display: inline-block; min-width : 100px;">
+				</span>.Email:<span id="email" contenteditable="true" style="display: inline-block; min-width : 100px;">
+				</span>.<br>
+				</p>
+				<p style="text-align : left" >
 				Diplôme préparé :…………………………………………………………………………………<br>
 				Département :……………………………………………………………………………………….<br>
 				Sujet de recherche :……………………………………………………………………………………<br>
 				Promoteur :…Mrs ./Mr………………………………………………………………………………..<br>
-				Co-promoteur:… Mrs ./Mr …………………………………………………………………………....<br>
+				Co-promoteur:… Mrs ./Mr …………………………………………………………………………....<br><br>
 				
-				<strong>Usage à long terme (plus d’une journée) :</strong><br><br>
-				J’ai souhaiterais par la présente avoir accès au Laboratoire Universitaire des Sciences et Technologie pour la période du :…………………… au :……………………………………………..<br>
+				<strong>Usage à long terme (plus d’une journée) :</strong>
+				</p>
+				<p style="text-align : left;" contenteditable="false">
+				J’ai souhaiterais par la présente avoir accès au Laboratoire Universitaire des Sciences et Technologie pour la période 
+				du :<span contenteditable="true" style="display: inline-block; min-width : 100px;">
+					<input id="de"  style="border : none;" type="date">
+				</span> au : <span contenteditable="true" style="display: inline-block; min-width : 100px;">
+					<input id="a" type="date" style="border : none;">
+				</span>.<br>
 				J’ai lu les conditions d’accès au Laboratoire Universitaire et j’accepte les conditions et les termes figurant dans la réglementation interne.
 				</p>
          	</p>
@@ -138,9 +154,11 @@
 	  text-decoration: none;
 	  display: inline-block;
 	  font-size: 16px;" 
-  onclick=location.href="/reserves/"> رجوع </button>
+  onclick="window.close()"> رجوع </button>
 
+<span id="btn_div">
 
+</span>
  <br><br><br><br>
 </div>
 <script src="{{ url('js/jquery.js') }}"></script>
@@ -148,7 +166,104 @@
 <script src="{{ url('js/jquery-1.8.3.min.js') }}"></script>
 <script src="{{ url('js/tagfeet.js') }}" ></script>
 <script type="text/javascript">
+window.onload = function(){
+	str = '<button id="bouton_save" style="'+
+	  'background-color: lightblue; /* Green */'+
+	  'border: none;'+
+	  'color: black;'+
+	  'cursor: pointer;'+
+	  'padding: 15px 32px;'+
+	  'text-align: center;'+
+	  'text-decoration: none;'+
+	  'display: inline-block;'+
+	  'font-size: 16px;"';
+	if(document.getElementById('id_autorisation')){
+  	  	str+= 'onclick="update_reserve()"> حفظ </button>';
+	}else{
+  	  	str+= 'onclick="save()"> حفظ </button>';
+	}
+	if(document.getElementById('not_user')){
+		document.getElementsByTagName('body')[0].contentEditable  = "false";
+	}
 
+	btn = document.getElementById('btn_div').innerHTML = str;
+
+};
+function update_reserve(){
+
+	id_autorisation = document.getElementById('id_autorisation').value;
+	num = document.getElementById('num').innerHTML.replace(/\D/g,'');
+	nom = document.getElementById('nom').innerHTML;
+	prenom = document.getElementById('prenom').innerHTML;
+	telephone = document.getElementById('telephone').innerHTML;
+	email = document.getElementById('email').innerHTML;
+	de = document.getElementById('de').innerHTML;
+	a = document.getElementById('a').innerHTML;
+	
+	url = "/update_autorisation";
+	const html = document.getElementsByTagName('html')[0].innerHTML;
+	$.ajax({
+	    url: url,
+	    type:"POST", 
+	    cache: false,
+		data : {
+			"html":html,
+			"num" : num,
+			"nom" : nom,
+			"prenom" : prenom,
+			"telephone" : telephone,
+			"email" : email,
+			"de" : de,
+			"a" : a,
+			"id_autorisation":id_autorisation,
+			"_token" : "{{ csrf_token() }}"},
+		success:function(response) {
+			console.log(response);
+		},
+		error:function(response) {
+			console.log(response);
+		},
+	});
+}
+
+function save(){
+	num = document.getElementById('num').innerHTML.replace(/\D/g,'');
+	nom = document.getElementById('nom').innerHTML;
+	prenom = document.getElementById('prenom').innerHTML;
+	telephone = document.getElementById('telephone').innerHTML;
+	email = document.getElementById('email').innerHTML;
+	de = document.getElementById('de').innerHTML;
+	a = document.getElementById('a').innerHTML;
+	year = Date("Y");
+	@if(isset($year))
+	year = "{{$year}}";
+	@endif
+
+	const html = document.getElementsByTagName('html')[0].innerHTML;
+	url = "/insert_autorisation/";
+	$.ajax({
+	    url: url,
+	    type:"POST", 
+	    cache: false,
+		data : {
+			"html":html,
+			"num" : num,
+			"nom" : nom,
+			"prenom" : prenom,
+			"telephone" : telephone,
+			"email" : email,
+			"de" : de,
+			"a" : a,
+			"_token" : "{{ csrf_token() }}"},
+		success:function(response) {
+			console.log(response);
+			window.close();
+		},
+		error:function(response) {
+			console.log(response);
+		},
+	});
+}
 
 function PrintElem(elem)
 {
@@ -167,6 +282,7 @@ function PrintElem(elem)
 }
 function printdiv(printdivname) {
 	document.getElementById('bouton').style.display = "none";
+	document.getElementById('bouton_save').style.display = "none";
 	document.getElementById('bouton_2').style.display = "none";
    /* var footstr = "</body>";
     var newstr = document.getElementById(printdivname).innerHTML;
@@ -177,6 +293,7 @@ function printdiv(printdivname) {
     print();
     document.getElementById('bouton').style.display = "inline-block";
 	document.getElementById('bouton_2').style.display = "inline-block";
+	document.getElementById('bouton_save').style.display = "inline-block";
 	
     return false;
 }

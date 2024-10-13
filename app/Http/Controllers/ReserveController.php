@@ -79,10 +79,17 @@ class ReserveController extends Controller
         return view('attestations.reserve_after',['user'=> $user,"rapport"=>$rapport,
         "activity"=>$activity,"outil"=>$outil,"num"=>$num,"year"=>$year,"state"=>$state]);
     }
-    public function demande_access($id="")
+    public function demande_access($id_rapport="")
     {   
         $user = Auth::user();
-        return view('attestations.demande_access',['user'=> $user]);
+        $rapport = DB::table('rapport')->
+        leftjoin("users","rapport.engineer","users.id")->
+        where('id_rapport',$id_rapport)->first();
+        $year = explode("-",$rapport->date)[0];
+        $last_num = DB::select(DB::raw("SELECT MAX(num_autorisation) as max FROM autorisations
+        WHERE year = ".$year))[0]->max;
+        $num = $last_num +1;
+        return view('attestations.demande_access',['user'=> $user,"year"=>$year]);
     }
     public function engagement($id="")
     {   
@@ -117,6 +124,34 @@ class ReserveController extends Controller
         $id = DB::table('reserves')->
         insertGetId(["rapport"=>$rapport,"num_reserve"=>$num,"html"=>$html,
         "outil"=>$outil,"state"=>$state,"user"=>$user->id,"year"=>$year]);
+        
+        return "success";
+
+    }
+    public function insert_autorisation(Request $request)
+    {   
+        $user = Auth::user();
+
+        $nom = $request["nom"];
+        $prenom = $request["prenom"];
+        $telephone = $request["telephone"];
+        $email = $request["email"];
+
+        $id_student = DB::table('students')->
+        insertGetId(["nom"=>$nom,"prenom"=>$prenom,"telephone"=>$telephone,
+        "email"=>$email]);
+
+        $num_autorisation = $request["num"];
+        $de = $request["de"];
+        $a = $request["a"];
+        $html = $request["html"];
+        $year = $request["year"];
+       
+        
+        $id = DB::table('autorisations')->
+        insertGetId(["num_autorisation"=>$num_autorisation,"id_student"=>$id_student,
+        "html"=>$html,
+        "de"=>$de,"a"=>$a,"year"=>$year]);
         
         return "success";
 
