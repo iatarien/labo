@@ -89,7 +89,7 @@ class ReserveController extends Controller
         $last_num = DB::select(DB::raw("SELECT MAX(num_autorisation) as max FROM autorisations
         WHERE year = ".$year))[0]->max;
         $num = $last_num +1;
-        return view('attestations.demande_access',['user'=> $user,"year"=>$year]);
+        return view('attestations.demande_access',['user'=> $user,"year"=>$year,"num"=>$num]);
     }
     public function engagement($id="")
     {   
@@ -128,6 +128,16 @@ class ReserveController extends Controller
         return "success";
 
     }
+    public function update_reserve(Request $request)
+    {   
+        $num = $request["num"];
+        $id_reserve = $request["id_reserve"];
+        $html = $request["html"];
+
+        DB::table('reserves')->where('id_reserve',$id_reserve)->
+        update(["num_reserve"=>$num,"html"=>$html]);
+        return "success";
+    }
     public function insert_autorisation(Request $request)
     {   
         $user = Auth::user();
@@ -142,6 +152,7 @@ class ReserveController extends Controller
         "email"=>$email]);
 
         $num_autorisation = $request["num"];
+        
         $de = $request["de"];
         $a = $request["a"];
         $html = $request["html"];
@@ -153,20 +164,36 @@ class ReserveController extends Controller
         "html"=>$html,
         "de"=>$de,"a"=>$a,"year"=>$year]);
         
-        return "success";
+        return $de."1989raouf1989".$a."1989raouf1989".$id_student;
 
     }
-    public function update_reserve(Request $request)
+    public function update_autorisation(Request $request)
     {   
-        $user = Auth::user();
-        $html = $request["html"];
-        $num = $request["num"];
-        $id_reserve = $request["id_reserve"];
 
-        DB::table('reserves')->where('id_reserve',$id_reserve)->
-        update(["num_reserve"=>$num,"html"=>$html]);
+        $user = Auth::user();
+        $nom = $request["nom"];
+        $prenom = $request["prenom"];
+        $telephone = $request["telephone"];
+        $email = $request["email"];
+        $id = $request["id_autorisation"];
+
+        $student = DB::table('autorisations')->where('id_autorisation',$id)->first()->id_student;
+
+        DB::table('students')->where("id_student",$student)->
+        update(["nom"=>$nom,"prenom"=>$prenom,"telephone"=>$telephone,
+        "email"=>$email]);
+
+        $num_autorisation = $request["num"];
+        $de = $request["de"];
+        $a = $request["a"];
+        $html = $request["html"];
+
+        $id = DB::table('autorisations')->where("id_autorisation",$id)->
+        update(["num_autorisation"=>$num_autorisation,
+        "html"=>$html,
+        "de"=>$de,"a"=>$a]);
         
-        return "success";
+        return $de."1989raouf1989".$a."1989raouf1989".$student;
 
     }
     public function close(){

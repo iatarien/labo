@@ -53,6 +53,8 @@ Route::get('/after_prise/{id?}', 'ReserveController@after_prise');
 /**َ AUTORISATION ROUTES **/
 
 Route::get('/demande_access/{id?}', 'ReserveController@demande_access');
+Route::post('/insert_autorisation', 'ReserveController@insert_autorisation');
+Route::post('/update_autorisation', 'ReserveController@update_autorisation');
 
 /** TOOLS ROUTES **/
 

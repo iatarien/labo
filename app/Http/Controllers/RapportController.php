@@ -124,18 +124,30 @@ class RapportController extends Controller
         $user = Auth::user()->id;
         $id_rapport = $request['id_rapport'];
         $type_activity = $request['activite'];
-        $niveau = $request['niveau'];
-        $module = $request['module'];
-        $teacher = $request['teacher'];
-        $sujet_trav = $request['sujet_trav'];
+        if($type_activity =="عمل تطبيقي"){
+            $niveau = $request['niveau'];
+            $module = $request['module'];
+            $teacher = $request['teacher'];
+            $sujet_trav = $request['sujet_trav'];
+    
+            $id = DB::table('activity')->
+            insertGetId(["type_activity"=>$type_activity,"teacher"=>$teacher,
+            "niveau"=>$niveau,"module"=>$module,"sujet_trav"=>$sujet_trav]);
+            DB::table('rapport')->where("id_rapport",$id_rapport)->update(["activite"=>$id]);
+            return Redirect::to('/add_outils/'.$id_rapport);
+        }elseif($type_activity =="أعمال نهاية الدراسة"){
+            $module = $request['student'];
+            $id = DB::table('activity')->
+            insertGetId(["type_activity"=>$type_activity,"teacher"=>$student]);
+            DB::table('rapport')->where("id_rapport",$id_rapport)->update(["activite"=>$id]);
 
-        $id = DB::table('activity')->
-        insertGetId(["type_activity"=>$type_activity,"teacher"=>$teacher,
-        "niveau"=>$niveau,"module"=>$module,"sujet_trav"=>$sujet_trav]);
-        DB::table('rapport')->where("id_rapport",$id_rapport)->update(["activite"=>$id]);
 
+            return Redirect::to('/add_outils/'.$id_rapport);
 
-        return Redirect::to('/add_outils/'.$id_rapport);
+        }elseif($type_activity =="زيارات"){
+            
+        }
+        
     }
 
     public function insert_outils(Request $request){

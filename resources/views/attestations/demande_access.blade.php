@@ -60,7 +60,7 @@
             : تامنغست في  
 			<h3>
 		</div>
-		<?php $v ="......."; ?>
+		<?php $v = "0".$num; ?>
 		<div style="  display: inline-block; float: right; width : 45%;" contenteditable="false">
             <h3 style="text-align : right;">
             رقم القيــــد: <span id="num" contenteditable="true">{{$v}}</span> ك ع ت / م ك ب ج/ {{$year}} 
@@ -103,9 +103,9 @@
 				<p style="text-align : left;" contenteditable="false">
 				J’ai souhaiterais par la présente avoir accès au Laboratoire Universitaire des Sciences et Technologie pour la période 
 				du :<span contenteditable="true" style="display: inline-block; min-width : 100px;">
-					<input id="de"  style="border : none;" type="date">
+					<input required id="de"  style="border : none;  font-weight : bold;" type="date">
 				</span> au : <span contenteditable="true" style="display: inline-block; min-width : 100px;">
-					<input id="a" type="date" style="border : none;">
+					<input required id="a" type="date" style="border : none; font-weight : bold;">
 				</span>.<br>
 				J’ai lu les conditions d’accès au Laboratoire Universitaire et j’accepte les conditions et les termes figurant dans la réglementation interne.
 				</p>
@@ -197,8 +197,8 @@ function update_reserve(){
 	prenom = document.getElementById('prenom').innerHTML;
 	telephone = document.getElementById('telephone').innerHTML;
 	email = document.getElementById('email').innerHTML;
-	de = document.getElementById('de').innerHTML;
-	a = document.getElementById('a').innerHTML;
+	de = document.getElementById('de').value;
+	a = document.getElementById('a').value;
 	
 	url = "/update_autorisation";
 	const html = document.getElementsByTagName('html')[0].innerHTML;
@@ -218,6 +218,7 @@ function update_reserve(){
 			"id_autorisation":id_autorisation,
 			"_token" : "{{ csrf_token() }}"},
 		success:function(response) {
+			window.la_reponse = response
 			console.log(response);
 		},
 		error:function(response) {
@@ -232,8 +233,12 @@ function save(){
 	prenom = document.getElementById('prenom').innerHTML;
 	telephone = document.getElementById('telephone').innerHTML;
 	email = document.getElementById('email').innerHTML;
-	de = document.getElementById('de').innerHTML;
-	a = document.getElementById('a').innerHTML;
+	de = document.getElementById('de').value;
+	a = document.getElementById('a').value;
+	if(de == "" || a ==""){
+		alert("يرجى إدخال تاريخ البداية و النهاية");
+		return;
+	}
 	year = Date("Y");
 	@if(isset($year))
 	year = "{{$year}}";
@@ -254,10 +259,12 @@ function save(){
 			"email" : email,
 			"de" : de,
 			"a" : a,
+			"year": year,
 			"_token" : "{{ csrf_token() }}"},
 		success:function(response) {
 			console.log(response);
-			window.close();
+			window.la_reponse = response;
+			//window.close();
 		},
 		error:function(response) {
 			console.log(response);

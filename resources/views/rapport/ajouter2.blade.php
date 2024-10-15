@@ -77,7 +77,7 @@
                                 <div class="form-group row" id="sujet">
                                     <label class="control-label col-lg-2 text-right" for="title">  موضوع العمل</label>
                                     <div class="col-lg-8">
-                                    <textarea required  name="sujet_trav" class="form-control" ></textarea>
+                                    <textarea   name="sujet_trav" class="form-control" ></textarea>
                                     </div>
                                 </div>
 
@@ -94,11 +94,11 @@
                                 <div class="form-group row" id="student" style="display : none;">
                                     <label class="control-label col-lg-2 text-right" for="title">الطالب</label>
                                     <div class="col-lg-8">
-                                    <input required  name="student" class="form-control" >
+                                    <input required  type="text" name="student" class="form-control" id="student">
                                     </div>
                                 </div>
                                 <div class="form-group" align="center">
-                                <button class="btn btn-primary" type="submit">التالي</button>
+                                <button id="save_btn" class="btn btn-primary" type="submit">التالي</button>
                                 </div>
                             </from>
                         </div>
@@ -140,20 +140,39 @@ function license_changed(val){
     if(val =="يوجد"){
         document.getElementById('student').style.display ='flex';
     }else{
-        document.getElementById('student').style.display ='none';
-        link = "demande_access"+"{{$rapport->id_rapport}}";
-        
+        // document.getElementById('student').style.display ='none';
+        link = "demande_access/"+"{{$rapport->id_rapport}}";
+        add_license(link);
         
     }
 }
 function add_license(link){
+    console.log(link);
     var myWindow = popupwindow("/"+link, "الترخيص", "3080","2720");
     var loop = setInterval(function() {   
         if(myWindow.closed) {  
+            dates = myWindow.la_reponse.split("1989raouf1989");
+            
+            de = new Date(dates[0]);
+            a = new Date(dates[1]);
+            student = dates[2];
+            d = new Date("{{$rapport->date}}");
+            if(d >= de && d <= a){
+                document.getElementById('student').value = student;
+                console.log(document.getElementById('student').value);
+                document.getElementById('save_btn').click();
+            }else{
+
+            }
             clearInterval(loop);  
         }
     }, 1000); 
 }
+function popupwindow(url, title, w, h) {
+  var left = (screen.width/2)-(w/2);
+  var top = (screen.height/2)-(h/2);
+  return window.open(url, title, 'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=no, copyhistory=no, width='+w+', height='+h+', top='+top+', left='+left);
+} 
 window.onload = function(){
 	document.getElementById('loading').style.display = "none";
 };
