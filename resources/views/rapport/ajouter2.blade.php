@@ -77,14 +77,14 @@
                                 <div class="form-group row" id="sujet">
                                     <label class="control-label col-lg-2 text-right" for="title">  موضوع العمل</label>
                                     <div class="col-lg-8">
-                                    <textarea   name="sujet_trav" class="form-control" ></textarea>
+                                    <textarea id="sujet_trav"  name="sujet_trav" class="form-control" ></textarea>
                                     </div>
                                 </div>
 
                                 <div class="form-group row" id="license" style="display : none;">
                                     <label class="control-label col-lg-2 text-right" for="title">الترخيص</label>
                                     <div class="col-lg-8">
-                                    <select class="form-control" name="activite" onchange="license_changed(this.value)">
+                                    <select class="form-control" name="license" onchange="license_changed(this.value)">
                                         <option>يوجد</option>
                                         <option>لا يوجد</option> 
                                     </select>
@@ -94,7 +94,7 @@
                                 <div class="form-group row" id="student" style="display : none;">
                                     <label class="control-label col-lg-2 text-right" for="title">الطالب</label>
                                     <div class="col-lg-8">
-                                    <input required  type="text" name="student" class="form-control" id="student">
+                                    <input required type="text" name="student" class="form-control" id="student_input">
                                     </div>
                                 </div>
                                 <div class="form-group" align="center">
@@ -112,6 +112,7 @@
 
             @include('components.footer')
 <script type="text/javascript">
+
 function changed_activity(val){
     if(val =="أعمال نهاية الدراسة"){
         document.getElementById('niveau').style.display ='none';
@@ -136,16 +137,18 @@ function changed_activity(val){
         document.getElementById('student').style.display ='none';
     }  
 }
+
 function license_changed(val){
     if(val =="يوجد"){
         document.getElementById('student').style.display ='flex';
     }else{
-        // document.getElementById('student').style.display ='none';
+        document.getElementById('student').style.display ='none';
         link = "demande_access/"+"{{$rapport->id_rapport}}";
         add_license(link);
         
     }
 }
+
 function add_license(link){
     console.log(link);
     var myWindow = popupwindow("/"+link, "الترخيص", "3080","2720");
@@ -156,11 +159,12 @@ function add_license(link){
             de = new Date(dates[0]);
             a = new Date(dates[1]);
             student = dates[2];
+            num = dates[3];
             d = new Date("{{$rapport->date}}");
             if(d >= de && d <= a){
-                document.getElementById('student').value = student;
-                console.log(document.getElementById('student').value);
-                document.getElementById('save_btn').click();
+                document.getElementById('student_input').value = student;
+                document.getElementById('sujet_trav').value = num;
+                //document.getElementById('save_btn').click();
             }else{
 
             }
@@ -168,11 +172,13 @@ function add_license(link){
         }
     }, 1000); 
 }
+
 function popupwindow(url, title, w, h) {
   var left = (screen.width/2)-(w/2);
   var top = (screen.height/2)-(h/2);
   return window.open(url, title, 'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=no, copyhistory=no, width='+w+', height='+h+', top='+top+', left='+left);
 } 
+
 window.onload = function(){
 	document.getElementById('loading').style.display = "none";
 };

@@ -147,7 +147,7 @@ class ReserveController extends Controller
         $telephone = $request["telephone"];
         $email = $request["email"];
 
-        $id_student = DB::table('students')->
+        $student = DB::table('students')->
         insertGetId(["nom"=>$nom,"prenom"=>$prenom,"telephone"=>$telephone,
         "email"=>$email]);
 
@@ -160,11 +160,11 @@ class ReserveController extends Controller
        
         
         $id = DB::table('autorisations')->
-        insertGetId(["num_autorisation"=>$num_autorisation,"id_student"=>$id_student,
+        insertGetId(["num_autorisation"=>$num_autorisation,"id_student"=>$student,
         "html"=>$html,
         "de"=>$de,"a"=>$a,"year"=>$year]);
         
-        return $de."1989raouf1989".$a."1989raouf1989".$id_student;
+        return $de."1989raouf1989".$a."1989raouf1989".$student."1989raouf1989".$num_autorisation;
 
     }
     public function update_autorisation(Request $request)
@@ -193,7 +193,7 @@ class ReserveController extends Controller
         "html"=>$html,
         "de"=>$de,"a"=>$a]);
         
-        return $de."1989raouf1989".$a."1989raouf1989".$student;
+        return $de."1989raouf1989".$a."1989raouf1989".$student."1989raouf1989".$num_autorisation;
 
     }
     public function close(){

@@ -36,9 +36,9 @@ class RapportController extends Controller
         $rapports = DB::table('rapport')->
         join("activity","activity.id_activity","=","rapport.activite")->
         leftjoin("users","rapport.engineer","users.id")->
-        join("niveau","activity.niveau","=","niveau.id_niveau")->
-        join("module","module.id_module","activity.module")->
-        join("labos","labos.id_labo","rapport.labo")->
+        leftjoin("niveau","activity.niveau","=","niveau.id_niveau")->
+        leftjoin("module","module.id_module","activity.module")->
+        leftjoin("labos","labos.id_labo","rapport.labo")->
         where('rapport.confirmed',"=","confirmed")->
         orderBy("date","DESC")->orderBy("time","ASC")->get();
         foreach($rapports as $rapport){
@@ -124,6 +124,7 @@ class RapportController extends Controller
         $user = Auth::user()->id;
         $id_rapport = $request['id_rapport'];
         $type_activity = $request['activite'];
+        echo $type_activity;
         if($type_activity =="عمل تطبيقي"){
             $niveau = $request['niveau'];
             $module = $request['module'];
@@ -136,11 +137,11 @@ class RapportController extends Controller
             DB::table('rapport')->where("id_rapport",$id_rapport)->update(["activite"=>$id]);
             return Redirect::to('/add_outils/'.$id_rapport);
         }elseif($type_activity =="أعمال نهاية الدراسة"){
-            $module = $request['student'];
+            $student = $request['student'];
+            $sujet_trav = $request['sujet_trav'];
             $id = DB::table('activity')->
-            insertGetId(["type_activity"=>$type_activity,"teacher"=>$student]);
+            insertGetId(["type_activity"=>$type_activity,"teacher"=>$student,"sujet_trav"=>$sujet_trav]);
             DB::table('rapport')->where("id_rapport",$id_rapport)->update(["activite"=>$id]);
-
 
             return Redirect::to('/add_outils/'.$id_rapport);
 
